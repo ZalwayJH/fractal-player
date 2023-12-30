@@ -41,7 +41,7 @@ function App() {
           </a>
         </div>
       </div>
-
+<p className="text-red-300  text-xl flex">THIS IS TAILWIND BABY WOOOO</p>
       <div className="features">
         <div className="feature-item">
           <article>

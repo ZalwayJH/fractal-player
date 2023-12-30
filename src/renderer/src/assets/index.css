@@ -1,4 +1,8 @@
-body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
   display: flex;
   flex-direction: column;
   font-family:
@@ -202,4 +206,4 @@ a:hover {
   .features .feature-item {
     width: 100%;
   }
-}
+} */
