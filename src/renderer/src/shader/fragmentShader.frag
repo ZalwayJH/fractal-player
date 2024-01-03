@@ -1,4 +1,4 @@
-export const fragmentShaderCopy = `
+
 precision highp float;
 
 // ==============
@@ -252,7 +252,7 @@ void main(){
     else {
       gl_FragColor = custom_colormap_3(pow(s, 6.0));
     }
-}`
+}
 // ``#define N 64.
 // #define B 32.
 // #define SS 4.
