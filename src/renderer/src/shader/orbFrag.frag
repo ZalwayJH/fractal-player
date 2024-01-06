@@ -9,5 +9,5 @@ void main() {
 
   vec3 color = vec3(abs(vUv - 0.5) * 2.0  * (1.0 - distort), 1.0);
   
-  gl_FragColor = vec4(color ,1.0);
+  gl_FragColor = vec4(color ,0.1);
 }

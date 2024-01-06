@@ -25,7 +25,7 @@ const Fractal = () => {
   useFrame(({ clock }) => {
     if (materialRef.current) {
       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
-      materialRef.current.uniforms.iResolution.set = (viewport.width, viewport.height);
+      materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
     }
   });
 
@@ -45,11 +45,13 @@ const Fractal = () => {
 const Orb = () => {
   const mesh = useRef();
   const hover = useRef(false);
+  const { viewport } = useThree();
 
   const uniforms = useMemo(
     () => ({
       u_intensity: { value: 0.3 },
-      u_time: { value: 0.0 }
+      u_time: { value: 0.0 },
+      iResolution: { value: [viewport.width, viewport.height] }
     }),
     []
   );
@@ -57,7 +59,7 @@ const Orb = () => {
   useFrame((state) => {
     const { clock } = state;
     mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
-
+    mesh.current.material.uniforms.iResolution.value = [viewport.width, viewport.height];
     mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
       mesh.current.material.uniforms.u_intensity.value,
       hover.current ? 0.85 : 0.15,
@@ -90,10 +92,11 @@ function Scene() {
   return (
     <Canvas camera={{ position: [0.0, 0.0, 8.0] }}>
       <Fractal />
-      <OrbitControls />
+      {/* <Orb /> */}
+      {/* <OrbitControls /> */}
       <Suspense fallback={null}>
-        <EffectComposer>
-          {/* <Bloom
+        {/* <EffectComposer> */}
+        {/* <Bloom
             intensity={0.001}
             kernelSize={KernelSize.HUGE}
             mipmapBlur={true}
@@ -102,9 +105,9 @@ function Scene() {
             luminanceThreshold={0.9}
             luminanceSmoothing={0.025}
           /> */}
-          <Noise opacity={0.01} />
+        {/* <Noise opacity={0.01} />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Suspense>
     </Canvas>
   );

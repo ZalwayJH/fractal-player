@@ -10,13 +10,15 @@ varying vec2 vUv;
                   }
 
                   void main() {
+       
+                    
                       vec2 fragCoord = vUv * iResolution;
                       vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y;
                       vec2 uv0 = uv;
                       vec3 finalColor = vec3(0.0);
                       
-                      for (float i = 0.0; i < 1.5; i++) {
-                          uv = fract(uv * 2.5) - 0.5;
+                      for (float i = 0.0; i < 4.0; i++) {
+                          uv = fract(uv * 1.5) - 0.5;
                           float d = length(uv) * exp(-length(uv0));
                           vec3 col = palette(length(uv0) + i*.4 + iTime*.4);
                           d = sin(d*8. + iTime)/8.;
