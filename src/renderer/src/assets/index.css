@@ -1,4 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+canvas {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
 body {
+  display: flex;
+  flex-direction: column;
+  font-family:
+    Roboto,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Open Sans',
+    sans-serif;
+  color: #86a5b1;
+  background-color: #2f3241;
+}
+
+/* body {
   display: flex;
   flex-direction: column;
   font-family:
@@ -202,4 +230,4 @@ a:hover {
   .features .feature-item {
     width: 100%;
   }
-}
+} */
