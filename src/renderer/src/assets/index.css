@@ -11,6 +11,14 @@ html {
 #root {
   height: 100%;
 }
+:root {
+  --tkPrimary: #1f2335;
+  --tkSecondary: #7aa2f7;
+  --tkThirdary: #bb9af7;
+  --tkForthary: #c53b53;
+  --tkFithary: #4fd6be;
+  --tkSixthary: #ff9e64;
+}
 
 body {
   font-family:
@@ -31,8 +39,44 @@ body {
 canvas {
   height: 100%;
 }
+
+audio::-webkit-media-controls-panel {
+  background: var(--tkPrimary);
+}
+audio::-webkit-media-controls-timeline {
+  background: var(--tkSixthary);
+
+  border-radius: 4rem;
+  margin: 1em;
+  padding: 1px;
+}
+
+audio::-webkit-media-controls-current-time-display {
+  margin-left: 1rem;
+  color: var(--tkSecondary);
+}
+audio::-webkit-media-controls-play-button {
+  background-color: var(--tkThirdary);
+  border-radius: 50%;
+}
+audio::-webkit-media-controls-time-remaining-display {
+  color: var(--tkFithary);
+}
+
+audio::-webkit-media-controls-mute-button {
+  background-color: var(--tkForthary);
+  border-radius: 50%;
+}
+
+audio::-webkit-media-controls-volume-slider {
+  background: #ff007c;
+  border-radius: 4rem;
+  padding: 1px;
+  margin: auto;
+}
+
 /* body {
-  display: flex;
+  display: flex;S
   flex-direction: column;
   font-family:
     Roboto,

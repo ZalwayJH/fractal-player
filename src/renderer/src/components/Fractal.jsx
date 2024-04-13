@@ -6,7 +6,7 @@ import fractalVert from '../shader/fractalVert.vert?raw';
 export default function Fractal() {
   const materialRef = useRef();
   const { viewport } = useThree();
-  console.log(viewport);
+
   const uniforms = useMemo(
     () => ({
       iTime: { value: 0 },
