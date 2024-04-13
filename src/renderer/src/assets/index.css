@@ -28,6 +28,9 @@ body {
   background-color: #2f3241;
 }
 
+canvas {
+  height: 100%;
+}
 /* body {
   display: flex;
   flex-direction: column;
