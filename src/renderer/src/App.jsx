@@ -3,8 +3,7 @@ import Visualizer from './components/Visualizer';
 
 function App() {
   return (
-    <div className="bg-[#2f3241] h-screen text-center">
-      <h1 className="text-black text-4xl ">Vizi</h1>
+    <div className="bg-[#2f3241] h-full min-h-[650px]">
       <Visualizer />
     </div>
   );

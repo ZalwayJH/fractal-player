@@ -1,4 +1,4 @@
-import { useMemo, useRef, Suspense } from 'react';
+import { Suspense } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
 import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
@@ -6,87 +6,88 @@ import { KernelSize, Resolution } from 'postprocessing';
 import { MathUtils } from 'three';
 import orbFrag from '../shader/orbFrag.frag?raw';
 import orbVert from '../shader/orbVert.vert?raw';
-import fractalFrag from '../shader/fractalFrag.frag?raw';
-import fractalVert from '../shader/fractalVert.vert?raw';
+// import fractalFrag from '../shader/fractalFrag.frag?raw';
+// import fractalVert from '../shader/fractalVert.vert?raw';
+import Fractal from './Fractal';
 
-const Fractal = () => {
-  const materialRef = useRef();
-  const { viewport } = useThree();
+// const Fractal = () => {
+//   const materialRef = useRef();
+//   const { viewport } = useThree();
 
-  const uniforms = useMemo(
-    () => ({
-      iTime: { value: 0 },
-      iResolution: { value: [viewport.width, viewport.height] }
-    }),
-    []
-  );
+//   const uniforms = useMemo(
+//     () => ({
+//       iTime: { value: 0 },
+//       iResolution: { value: [viewport.width, viewport.height] }
+//     }),
+//     []
+//   );
 
-  // Update uniforms on each frame
-  useFrame(({ clock }) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
-      materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
-    }
-  });
+//   // Update uniforms on each frame
+//   useFrame(({ clock }) => {
+//     if (materialRef.current) {
+//       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
+//       materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
+//     }
+//   });
 
-  return (
-    <mesh position={[0, 0, 0]} scale={[viewport.width, viewport.height, 1]}>
-      <planeGeometry />
-      <shaderMaterial
-        ref={materialRef}
-        vertexShader={fractalVert}
-        fragmentShader={fractalFrag}
-        uniforms={uniforms}
-      />
-    </mesh>
-  );
-};
+//   return (
+//     <mesh position={[0, 0, 0]} scale={[viewport.width, viewport.height, 1]}>
+//       <planeGeometry />
+//       <shaderMaterial
+//         ref={materialRef}
+//         vertexShader={fractalVert}
+//         fragmentShader={fractalFrag}
+//         uniforms={uniforms}
+//       />
+//     </mesh>
+//   );
+// };
 
-const Orb = () => {
-  const mesh = useRef();
-  const hover = useRef(false);
-  const { viewport } = useThree();
+// const Orb = () => {
+//   const mesh = useRef();
+//   const hover = useRef(false);
+//   const { viewport } = useThree();
 
-  const uniforms = useMemo(
-    () => ({
-      u_intensity: { value: 0.3 },
-      u_time: { value: 0.0 },
-      iResolution: { value: [viewport.width, viewport.height] }
-    }),
-    []
-  );
+//   const uniforms = useMemo(
+//     () => ({
+//       u_intensity: { value: 0.1 },
+//       u_time: { value: 0.0 },
+//       iResolution: { value: [viewport.width, viewport.height] }
+//     }),
+//     []
+//   );
 
-  useFrame((state) => {
-    const { clock } = state;
-    mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
-    mesh.current.material.uniforms.iResolution.value = [viewport.width, viewport.height];
-    mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
-      mesh.current.material.uniforms.u_intensity.value,
-      hover.current ? 0.85 : 0.15,
-      0.02
-    );
-    mesh.current.rotation.y += 0.01;
-  });
+//   useFrame((state) => {
+//     const { clock } = state;
+//     mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
+//     mesh.current.material.uniforms.iResolution.value = [viewport.width, viewport.height];
+//     mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
+//       mesh.current.material.uniforms.u_intensity.value,
+//       hover.current ? 0.85 : 0.15,
+//       0.02
+//     );
+//     mesh.current.rotation.y += 0.01;
+//   });
 
-  return (
-    <mesh
-      ref={mesh}
-      position={[0, 0, 0]}
-      scale={1.5}
-      rotation={[0.1, Math.PI * 0.002, 0]}
-      onPointerOver={() => (hover.current = true)}
-      onPointerOut={() => (hover.current = false)}
-    >
-      <icosahedronGeometry args={[2, 20]} />
-      <shaderMaterial
-        fragmentShader={orbFrag}
-        vertexShader={orbVert}
-        uniforms={uniforms}
-        wireframe={false}
-      />
-    </mesh>
-  );
-};
+//   return (
+//     <mesh
+//       ref={mesh}
+//       position={[0, 0, 0]}
+//       scale={1.5}
+//       rotation={[0.1, Math.PI * 0.002, 0]}
+//       onPointerOver={() => (hover.current = true)}
+//       onPointerOut={() => (hover.current = false)}
+//     >
+//       <icosahedronGeometry args={[2, 20]} />
+//       <shaderMaterial
+//         fragmentShader={orbFrag}
+//         vertexShader={orbVert}
+//         uniforms={uniforms}
+//         wireframe={false}
+//       />
+//     </mesh>
+//   );
+// };
 
 function Scene() {
   return (
