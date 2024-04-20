@@ -6,12 +6,13 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; media-src http://localhost:5173/src/songs/;  "
+      content="default-src 'self' ; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; media-src http://localhost:5173/src/songs/;  "
     />
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="/src/components/utils/closeApp.js"></script>
   </body>
 </html>

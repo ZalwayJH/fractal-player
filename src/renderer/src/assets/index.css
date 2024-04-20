@@ -75,6 +75,21 @@ audio::-webkit-media-controls-volume-slider {
   margin: auto;
 }
 
+#titleBar {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+#titleButtonsMin {
+  -webkit-app-region: no-drag;
+}
+#titleButtonsMax {
+  -webkit-app-region: no-drag;
+}
+#titleButtonsClose {
+  -webkit-app-region: no-drag;
+}
+
 /* body {
   display: flex;S
   flex-direction: column;

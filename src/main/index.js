@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron';
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
@@ -10,10 +10,13 @@ function createWindow() {
     height: 800,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      nodeIntegration: true,
+      contextIsolation: false
     }
   });
 
@@ -58,6 +61,23 @@ app.whenReady().then(() => {
   });
 });
 
+// IPC handlers
+ipcMain.on('minimize-window', () => {
+  BrowserWindow.getFocusedWindow().minimize();
+});
+
+ipcMain.on('maximize-window', () => {
+  const focusedWindow = BrowserWindow.getFocusedWindow();
+  if (focusedWindow.isMaximized()) {
+    focusedWindow.unmaximize();
+  } else {
+    focusedWindow.maximize();
+  }
+});
+
+ipcMain.on('close-window', () => {
+  BrowserWindow.getFocusedWindow().close();
+});
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
