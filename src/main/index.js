@@ -3,7 +3,7 @@ import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1200,
@@ -15,8 +15,8 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-      nodeIntegration: true,
-      contextIsolation: false
+      // nodeIntegration: true,
+      contextIsolation: true
     }
   });
 

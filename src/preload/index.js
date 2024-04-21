@@ -1,32 +1,14 @@
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-// // closeApp.js
-
-// import { ipcRenderer } from 'electron';
-
-// export default function manipApp() {
-//   // Get references to buttons
-//   const minimizeButton = document.getElementById('titleButtonsMin');
-//   const maximizeButton = document.getElementById('titleButtonsMax');
-//   const closeButton = document.getElementById('titleButtonsClose');
-
-//   // Add click event listeners to buttons
-//   minimizeButton.addEventListener('click', () => {
-//     ipcRenderer.send('minimize-window');
-//   });
-
-//   maximizeButton.addEventListener('click', () => {
-//     console.log('max');
-//     ipcRenderer.send('maximize-window');
-//   });
-
-//   closeButton.addEventListener('click', () => {
-//     ipcRenderer.send('close-window');
-//   });
-// }
 
 // Custom APIs for renderer
-const api = {};
+const API = {
+  window: {
+    close: () => ipcRenderer.send('close-window'),
+    minimize: () => ipcRenderer.send('minimize-window'),
+    maximize: () => ipcRenderer.send('maximize-window')
+  }
+};
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
@@ -34,11 +16,11 @@ const api = {};
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('api', api);
+    contextBridge.exposeInMainWorld('app', API);
   } catch (error) {
     console.error(error);
   }
 } else {
   window.electron = electronAPI;
-  window.api = api;
+  window.app = API;
 }
