@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import audioSrc from '../../songs/audoMoe.mp3';
+import {
+  TbPlayerPlayFilled,
+  TbPlayerSkipForwardFilled,
+  TbPlayerSkipBackFilled,
+  TbVolume,
+  TbArrowsShuffle,
+  TbRepeat,
+  TbFileMusic
+} from 'react-icons/tb';
 
 function AudioControls() {
   const audioRef = useRef();
@@ -8,9 +17,27 @@ function AudioControls() {
     <div>
       <div className="group ease-in-out duration-300">
         <div
-          className={`z-10 right-5 left-5 bottom-0  rounded-md mx-auto h-6 min-w-min absolute  `}
+        // className={`z-10 right-5 left-5 bottom-0  rounded-md mx-auto h-6 min-w-min absolute  `}
         >
-          <audio
+          <section className="z-10  bottom-5 right-5 left-5 lg:opacity-100 md:opacity-100 xsm:opacity-0 mx-auto max-w-[20em] min-w-[1em] absolute ease-out duration-300 transition-all bg-[#16161E]/90 ring-1 ring-white/[0.2] backdrop-blur-xl drop-shadow-lg  h-[19em] rounded-lg ">
+            <img className="col-span-7 bg-slate-600 w-[18em] h-[12em] mt-4 mx-auto" />
+            <div className="w-full absolute h-[7em] items-center pb-5 justify-items-center  grid grid-cols-7 ">
+              <span className="text-[#38c3a7] text-sm">0:54</span>
+              <div
+                id="temp-timeline"
+                className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
+              ></div>
+              <span className="text-red-200 text-sm">3:15</span>
+              <TbFileMusic className="text-[#eec48a] text-xl row-start-2 " />
+              <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
+              <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />
+              <TbPlayerPlayFilled className=" text-[#7aa2f7] text-5xl   row-start-2 " />
+              <TbPlayerSkipForwardFilled className="text-[#4fd6be] text-2xl  row-start-2 " />
+              <TbRepeat className="text-[#c069cb] text-xl  row-start-2 " />
+              <TbVolume className="text-[#c53b4b] text-xl  row-start-2 " />
+            </div>
+          </section>
+          {/* <audio
             id="audioTag"
             ref={audioRef}
             src={audioSrc}
@@ -18,7 +45,7 @@ function AudioControls() {
             controls
             controlsList="nodownload noplaybackrate"
             preload="true"
-          ></audio>
+          ></audio> */}
         </div>
       </div>
     </div>

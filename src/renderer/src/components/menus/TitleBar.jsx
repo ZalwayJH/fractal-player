@@ -5,7 +5,7 @@ function TitleBar() {
   return (
     <div
       id="titleBar"
-      className=" z-20 w-full grid grid-flow-col justify-end gap-5 auto-cols-max absolute m-0 top-0 p-3  "
+      className=" z-20 w-full bg-black/0 grid grid-flow-col justify-end gap-5 auto-cols-max absolute m-0 top-0 p-3  "
     >
       <button
         id="titleButtonsMin"

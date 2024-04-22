@@ -8,7 +8,8 @@
 //   analyzer.fftSize = 2048;
 //   const bufferLength = analyzer.frequencyBinCount;
 //   const dataArray = Uint8Array(bufferLength);
-//   return analyzer.getByteTimeDomainData(dataArray);
+//   analyzer.getByteTimeDomainData(dataArray);
+
 // }
 
 // export default audioAnalyzer;
