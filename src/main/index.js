@@ -1,5 +1,6 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
+import { createFileRoute, createURLRoute } from 'electron-router-dom';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 

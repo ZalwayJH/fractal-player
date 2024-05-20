@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 import icons from './assets/icons.svg';
 import Visualizer from './components/Visualizer';
 import AudioControls from './components/menus/AudioControls';
