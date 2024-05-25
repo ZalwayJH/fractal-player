@@ -18,10 +18,13 @@ export default function Fractal({ musicData }) {
   // Update uniforms on each frame
   useFrame(({ clock }) => {
     if (materialRef.current) {
-      console.log(musicData[0]);
+      const averagedMusicData = [];
+      averagedMusicData.push(musicData.reduce((sum, value) => sum + value, 0));
+      console.log(averagedMusicData);
       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
       materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
-      materialRef.current.uniforms.iFrequency.value = musicData[0];
+      materialRef.current.uniforms.iFrequency.value =
+        averagedMusicData[0] === 0 ? 8.0 : averagedMusicData[0];
       // for (let i = 0; i < 1024; i++) {
       // }
     }

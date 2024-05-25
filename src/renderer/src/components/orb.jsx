@@ -7,7 +7,7 @@ import { MathUtils } from 'three';
 import orbFrag from '../shader/orbFrag.frag?raw';
 import orbVert from '../shader/orbVert.vert?raw';
 
-export default function Orb() {
+export default function Orb({ musicData }) {
   const mesh = useRef();
   const hover = useRef(false);
   const { viewport } = useThree();
@@ -23,6 +23,7 @@ export default function Orb() {
 
   useFrame((state) => {
     const { clock } = state;
+    const averagedMusicData = musicData.reduce((sum, value) => sum + value, 0);
     mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
     mesh.current.material.uniforms.iResolution.value = [viewport.width, viewport.height];
     mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(

@@ -21,7 +21,7 @@ function AudioControls({ setMusicData }) {
     new Howl({
       src: [audioSrc],
       html5: false,
-      volume: 0.2,
+      volume: 0.5,
       onplay: function () {
         // Initialize the analyser node
         const analyser = Howler.ctx.createAnalyser();
@@ -31,9 +31,12 @@ function AudioControls({ setMusicData }) {
         // Buffer to hold the audio data
         const dataArray = new Float32Array(bufferLength);
         const smoothedDataArray = new Float32Array(bufferLength);
+
         function getAudioData() {
           // analyser.getByteFrequencyData(dataArray);
           analyser.getFloatTimeDomainData(dataArray);
+
+          // console.log(dataArray);
           // Process your dataArray here
           //   console.log(dataArray);
 
@@ -45,10 +48,9 @@ function AudioControls({ setMusicData }) {
             if (i === 0) {
               smoothedDataArray[i] = dataArray[i];
             } else {
-              smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
+              smoothedDataArray[i] = 0.95 * smoothedDataArray[i - 1] + 0.05 * dataArray[i];
             }
           }
-          smoothedDataArray.reduce((sum, value) => sum + value, 0);
 
           setMusicData(smoothedDataArray);
           // setMusicData(dataArray);

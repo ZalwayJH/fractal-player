@@ -12,7 +12,7 @@ function Visualizer({ musicData }) {
         <Suspense fallback={null}>
           <Routes>
             <Route exact path="/fractal" element={<Fractal musicData={musicData} />} />
-            <Route exact path="/orb" element={<Orb />} />
+            <Route exact path="/orb" element={<Orb musicData={musicData} />} />
           </Routes>
         </Suspense>
       </Canvas>
