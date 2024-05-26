@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useSound from 'use-sound';
 import { Howl, Howler } from 'howler';
-import audioSrc from '../../songs/audoMoe.mp3';
+import audioMoe from '../../songs/audoMoe.mp3';
+import neverFadeAway from '../../songs/never fade away.mp3';
+import rebelpath from '../../songs/rebel path.mp3';
 import {
   TbPlayerPlayFilled,
   TbPlayerPauseFilled,
@@ -19,13 +21,13 @@ function AudioControls({ setMusicData }) {
 
   const music = useRef(
     new Howl({
-      src: [audioSrc],
+      src: [rebelpath],
       html5: false,
-      volume: 0.5,
+      volume: 1.0,
       onplay: function () {
         // Initialize the analyser node
         const analyser = Howler.ctx.createAnalyser();
-        analyser.fftSize = 2048; // Adjust as needed
+        analyser.fftSize = 1024; // Adjust as needed
         Howler.masterGain.connect(analyser);
         const bufferLength = analyser.frequencyBinCount;
         // Buffer to hold the audio data
@@ -48,7 +50,7 @@ function AudioControls({ setMusicData }) {
             if (i === 0) {
               smoothedDataArray[i] = dataArray[i];
             } else {
-              smoothedDataArray[i] = 0.95 * smoothedDataArray[i - 1] + 0.05 * dataArray[i];
+              smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
             }
           }
 
@@ -62,27 +64,6 @@ function AudioControls({ setMusicData }) {
       }
     })
   );
-  // const music = useRef(new Howl({ src: [audioSrc], html5: false, }));
-
-  // const [play, { pause, duration, sound }] = useSound(audioSrc);
-  // console.log(sound, 'sound from use-sound');
-  // console.log(music.current, 'music from Howler');
-
-  // var music = new Howl({
-  //   src: [audioSrc],
-  //   html5: true,
-  //   volume: 0.5
-  // });
-  // music.pannerAttr({
-  //   distanceModel: 'linear',
-  //   maxDistance: 17,
-  //   panningModel: 'equalpower', // <- sounds are crispy again!!!
-  //   refDistance: 1,
-  //   rolloffFactor: 1,
-  //   coneInnerAngle: 360,
-  //   coneOuterAngle: 360,
-  //   coneOuterGain: 0
-  // });
 
   const playPause = () => {
     if (isPlaying) {
@@ -93,32 +74,6 @@ function AudioControls({ setMusicData }) {
       setIsPlaying(true);
     }
   };
-
-  // const analyser = Howler.ctx.createAnalyser();
-  // Howler.masterGain.connect(analyser);
-
-  // analyser.fftSize = 2048;
-  // const bufferLength = analyser.frequencyBinCount;
-  // const dataArray = new Float32Array(bufferLength);
-  // useEffect(() => {
-  //   if (music) {
-  //     analyser.connect(Howler.ctx.destination);
-  //   }
-  //   const updateDataArray = () => {
-  //     if (isPlaying) {
-  //       analyser.getFloatFrequencyData(dataArray);
-
-  //       setMusicData(dataArray);
-  //     }
-  //   };
-
-  //   const interval = setInterval(updateDataArray, 100);
-  //   return () => clearInterval(interval);
-  // }, [analyser, dataArray]);
-
-  // const audioContext = new AudioContext();
-  // const audp = document.querySelector('audio');
-  // const track = audioContext.createMediaElementSource(audp);
 
   return (
     <div>

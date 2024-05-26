@@ -1,7 +1,9 @@
 uniform float iTime;
 uniform vec2 iResolution;
-uniform float iFrequency;
+uniform vec2 iFrequency;
 varying vec2 vUv;
+
+// idea for freq, split the value into 2 or 3 variables depending on the intensity of signal ie. how big or small the number is. 
                   vec3 palette( float t ) {
                       vec3 a = vec3(0.5, 0.5, 0.5);
                       vec3 b = vec3(0.5, 0.5, 0.5);
@@ -17,12 +19,14 @@ varying vec2 vUv;
                       vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y;
                       vec2 uv0 = uv;
                       vec3 finalColor = vec3(0.0);
-                      float finalFreq = iFrequency ==  8.0 ? 8.0 :( (iFrequency - 20.0) / 10.0 );
+                      float highFreq =iFrequency.y;
+                      float lowFreq = iFrequency.x <=  8.0 ? 8.0 : iFrequency.x;
+                    //   float baseFreq = iFrequency.xy <=  8.0 ? 8.0 : iFrequency;
                       for (float i = 0.0; i < 4.0; i++) {
                           uv = fract(uv * 1.5) - 0.5;
                           float d = length(uv) * exp(-length(uv0));
                           vec3 col = palette(length(uv0) + i*.4 + iTime*.4);
-                          d = sin(d*8.0 + iTime )/finalFreq;
+                          d = sin(d*8.0 + iTime )/highFreq;
                           d = abs(d);
                           d = pow(0.01 / d, 1.2);
                           finalColor += col * d;

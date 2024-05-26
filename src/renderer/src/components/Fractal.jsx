@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import fractalFrag from '../shader/fractalFrag.frag?raw';
 import fractalVert from '../shader/fractalVert.vert?raw';
+import { MathUtils } from 'three';
 
 export default function Fractal({ musicData }) {
   const materialRef = useRef();
@@ -18,13 +19,19 @@ export default function Fractal({ musicData }) {
   // Update uniforms on each frame
   useFrame(({ clock }) => {
     if (materialRef.current) {
-      const averagedMusicData = [];
-      averagedMusicData.push(musicData.reduce((sum, value) => sum + value, 0));
-      console.log(averagedMusicData);
+      // figure out a way to use MathUtils (maybe lerp) to transition a value from between less than 8.0 and 10.0
+      const averagedMusicData = musicData.reduce((sum, value) => sum + value, 0);
+      const highFreq = MathUtils.lerp(
+        0.0,
+        averagedMusicData > 3.0 && averagedMusicData < 60.0 ? averagedMusicData : 8.0,
+        0.05
+      );
+      console.log(highFreq);
+      const lowFreq = averagedMusicData < 20.0 ? averagedMusicData : 0.0;
+      // console.log(averagedMusicData);
       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
       materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
-      materialRef.current.uniforms.iFrequency.value =
-        averagedMusicData[0] === 0 ? 8.0 : averagedMusicData[0];
+      materialRef.current.uniforms.iFrequency.value = [lowFreq, highFreq];
       // for (let i = 0; i < 1024; i++) {
       // }
     }
