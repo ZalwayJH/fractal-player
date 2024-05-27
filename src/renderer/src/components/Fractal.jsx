@@ -20,12 +20,9 @@ export default function Fractal({ musicData }) {
   useFrame(({ clock }) => {
     if (materialRef.current) {
       // figure out a way to use MathUtils (maybe lerp) to transition a value from between less than 8.0 and 10.0
+
       const averagedMusicData = musicData.reduce((sum, value) => sum + value, 0);
-      const highFreq = MathUtils.lerp(
-        0.0,
-        averagedMusicData > 3.0 && averagedMusicData < 60.0 ? averagedMusicData : 8.0,
-        0.05
-      );
+      const highFreq = averagedMusicData <= 8.0 ? 8.0 : averagedMusicData;
       console.log(highFreq);
       const lowFreq = averagedMusicData < 20.0 ? averagedMusicData : 0.0;
       // console.log(averagedMusicData);

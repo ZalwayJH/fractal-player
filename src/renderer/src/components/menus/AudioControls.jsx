@@ -21,7 +21,7 @@ function AudioControls({ setMusicData }) {
 
   const music = useRef(
     new Howl({
-      src: [rebelpath],
+      src: [neverFadeAway],
       html5: false,
       volume: 1.0,
       onplay: function () {
