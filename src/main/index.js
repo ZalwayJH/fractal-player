@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join } from 'path';
 import { createFileRoute, createURLRoute } from 'electron-router-dom';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
@@ -6,6 +6,7 @@ import icon from '../../resources/icon.png?asset';
 
 async function createWindow() {
   // Create the browser window.
+
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -41,10 +42,34 @@ async function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+async function handleFileOpen() {
+  return await dialog
+    .showOpenDialog(BrowserWindow.mainWindow, {
+      title: 'Select Songs or Playlists Folders',
+      properties: ['OpenFile', 'multiSelections'],
+      filters: [
+        { name: 'Songs (.mp3, .wav, .wma)', extensions: ['mp3', 'wav', 'wma'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    })
+    .then((result) => {
+      if (!result.canceled) {
+        console.log('file paths wre selected:', result.filePaths);
+        return result.filePaths;
+      } else {
+        console.log('file dialogue was cancelled');
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.log('error opening file dialog', error);
+    });
+}
+
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
-
+  ipcMain.handle('dialog:openFile', handleFileOpen);
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils

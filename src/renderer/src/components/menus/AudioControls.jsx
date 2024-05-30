@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import useSound from 'use-sound';
 import { Howl, Howler } from 'howler';
 import audioMoe from '../../songs/audoMoe.mp3';
-import neverFadeAway from '../../songs/never fade away.mp3';
+import neverFadeAway from '../../songs/neverfadeaway.mp3';
 import rebelpath from '../../songs/rebel path.mp3';
+import RipandTear from '../../songs/RipandTear.mp3';
+
 import {
   TbPlayerPlayFilled,
   TbPlayerPauseFilled,
@@ -16,12 +18,15 @@ import {
   TbFileMusic
 } from 'react-icons/tb';
 
+import { openFileFromDirectory } from '../utils/titleControls';
+
 function AudioControls({ setMusicData }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [songList, setSongList] = useState([neverFadeAway]);
 
   const music = useRef(
     new Howl({
-      src: [neverFadeAway],
+      src: songList,
       html5: false,
       volume: 1.0,
       onplay: function () {
@@ -75,6 +80,16 @@ function AudioControls({ setMusicData }) {
     }
   };
 
+  async function handleAddingSongs() {
+    try {
+      const filePaths = await openFileFromDirectory();
+      setSongList(filePaths);
+      console.log('File paths received in React component:', filePaths);
+    } catch (error) {
+      console.log('Error in React component while adding songs:', error);
+    }
+  }
+
   return (
     <div>
       <div className="group ease-in-out duration-300">
@@ -116,10 +131,13 @@ function AudioControls({ setMusicData }) {
                 onClick={playPause}
                 className="row-start-2 text-[#7aa2f7] text-5xl "
               /> */}
-
               <TbPlayerSkipForwardFilled className="text-[#4fd6be] text-2xl  row-start-2 " />
               <TbRepeat className="text-[#c069cb] text-xl  row-start-2 " />
               <TbVolume className="text-[#c53b4b] text-xl  row-start-2 " />
+              <button onClick={handleAddingSongs} className="bg-white rounded-xl w-8 h-8">
+                Open file
+              </button>
+              File path: <strong id="filePath"></strong>
             </div>
           </section>
           {/* <audio

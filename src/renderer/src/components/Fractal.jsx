@@ -11,7 +11,7 @@ export default function Fractal({ musicData }) {
     () => ({
       iTime: { value: 0 },
       iResolution: { value: [viewport.width, viewport.height] },
-      iFrequency: { value: 0 }
+      iFrequency: { value: [0.0, 8.0] }
     }),
     []
   );
@@ -22,13 +22,12 @@ export default function Fractal({ musicData }) {
       // figure out a way to use MathUtils (maybe lerp) to transition a value from between less than 8.0 and 10.0
 
       const averagedMusicData = musicData.reduce((sum, value) => sum + value, 0);
-      const highFreq = averagedMusicData <= 8.0 ? 8.0 : averagedMusicData;
-      console.log(highFreq);
-      const lowFreq = averagedMusicData < 20.0 ? averagedMusicData : 0.0;
+      const frequency = MathUtils.lerp(averagedMusicData / 16.0, 8.0, 0.05);
+
       // console.log(averagedMusicData);
       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
       materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
-      materialRef.current.uniforms.iFrequency.value = [lowFreq, highFreq];
+      materialRef.current.uniforms.iFrequency.value = frequency;
       // for (let i = 0; i < 1024; i++) {
       // }
     }

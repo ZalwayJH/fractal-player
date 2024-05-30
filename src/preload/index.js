@@ -6,7 +6,18 @@ const API = {
   window: {
     close: () => ipcRenderer.send('close-window'),
     minimize: () => ipcRenderer.send('minimize-window'),
-    maximize: () => ipcRenderer.send('maximize-window')
+    maximize: () => ipcRenderer.send('maximize-window'),
+    openFile: () =>
+      ipcRenderer
+        .invoke('dialog:openFile')
+        .then((result) => {
+          console.log('File paths received in preload script:', result);
+          return result;
+        })
+        .catch((error) => {
+          console.error('Error in preload script while opening file:', error);
+          throw error;
+        })
   }
 };
 
@@ -21,6 +32,6 @@ if (process.contextIsolated) {
     console.error(error);
   }
 } else {
-  window.electron = electronAPI;
+  window.electron = { ipcRenderer };
   window.app = API;
 }
