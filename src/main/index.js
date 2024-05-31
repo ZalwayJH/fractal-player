@@ -12,7 +12,7 @@ async function createWindow() {
     height: 800,
     show: false,
     autoHideMenuBar: true,
-    titleBarStyle: 'hidden',
+    titleBarStyle: process.platform === 'win32' ? 'hidden' : 'visible',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

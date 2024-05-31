@@ -1,7 +1,8 @@
 import React from 'react';
-import { minimizeWindow, maximizeWindow, closeWindow } from '../utils/titleControls.js';
+import { minimizeWindow, maximizeWindow, closeWindow } from '../../API/windowAPIs.js';
 
 function TitleBar() {
+  //console.log(process.platform);
   return (
     <div
       id="titleBar"

@@ -24,7 +24,7 @@ export default function Fractal({ musicData }) {
       const averagedMusicData = musicData.reduce((sum, value) => sum + value, 0);
       const frequency = MathUtils.lerp(averagedMusicData / 16.0, 8.0, 0.05);
 
-      // console.log(averagedMusicData);
+      // console.log(frequency);
       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
       materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
       materialRef.current.uniforms.iFrequency.value = frequency;

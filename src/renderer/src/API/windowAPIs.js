@@ -10,11 +10,12 @@ function closeWindow() {
 async function openFileFromDirectory() {
   try {
     const result = await app.window.openFile();
-    console.log('file paths recieved in api file', result);
-    return result; // Ensure this value is returned properly
+    //should return an array of file paths that the user selected or an empty array if cancelled
+    return result;
   } catch (error) {
     console.error('error in api file while opening file', error);
-    return []; // Handle errors gracefully
+    //if error we return an empty array incase of error
+    return [];
   }
 }
 export { closeWindow, minimizeWindow, maximizeWindow, openFileFromDirectory };

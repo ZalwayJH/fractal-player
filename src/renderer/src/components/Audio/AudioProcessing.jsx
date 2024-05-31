@@ -18,15 +18,16 @@ import {
   TbFileMusic
 } from 'react-icons/tb';
 
-import { openFileFromDirectory } from '../utils/titleControls';
+import { openFileFromDirectory } from '../../API/windowAPIs';
 
-function AudioControls({ setMusicData }) {
+function AudioProcessing({ setMusicData }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [songList, setSongList] = useState([neverFadeAway]);
+  const [songList, setSongList] = useState([RipandTear]);
+  const animationFrameIdRef = useRef(null);
 
   const music = useRef(
     new Howl({
-      src: songList,
+      src: [...songList],
       html5: false,
       volume: 1.0,
       onplay: function () {
@@ -40,35 +41,43 @@ function AudioControls({ setMusicData }) {
         const smoothedDataArray = new Float32Array(bufferLength);
 
         function getAudioData() {
-          // analyser.getByteFrequencyData(dataArray);
-          analyser.getFloatTimeDomainData(dataArray);
-
-          // console.log(dataArray);
-          // Process your dataArray here
-          //   console.log(dataArray);
-
-          //    Call this function again to keep updating the dataArray
-          for (let i = 0; i < bufferLength; i++) {
-            if (dataArray[i] < 0) {
-              dataArray[i] = dataArray[i] * -1;
+          if (music.current.playing()) {
+            // analyser.getByteFrequencyData(dataArray);
+            analyser.getFloatTimeDomainData(dataArray);
+            //Lowpass filter on dataArray to smooth out signal
+            for (let i = 0; i < bufferLength; i++) {
+              if (dataArray[i] < 0) {
+                dataArray[i] = dataArray[i] * -1;
+              }
+              if (i === 0) {
+                smoothedDataArray[i] = dataArray[i];
+              } else {
+                smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
+              }
             }
-            if (i === 0) {
-              smoothedDataArray[i] = dataArray[i];
-            } else {
-              smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
-            }
+
+            setMusicData(smoothedDataArray);
+            // setMusicData(dataArray);
+            //    Call this function again to keep updating the dataArray
+            animationFrameIdRef.current = requestAnimationFrame(getAudioData);
           }
-
-          setMusicData(smoothedDataArray);
-          // setMusicData(dataArray);
-          requestAnimationFrame(getAudioData);
         }
 
         // Start retrieving audio data
         getAudioData();
+      },
+      onpause: function () {
+        cancelAnimationFrame(animationFrameIdRef.current);
+      },
+      onstop: function () {
+        cancelAnimationFrame(animationFrameIdRef.current);
       }
     })
   );
+
+  useEffect(() => {
+    music.current._src = songList;
+  }, [songList]);
 
   const playPause = () => {
     if (isPlaying) {
@@ -83,11 +92,33 @@ function AudioControls({ setMusicData }) {
   async function handleAddingSongs() {
     try {
       const filePaths = await openFileFromDirectory();
-      setSongList(filePaths);
-      console.log('File paths received in React component:', filePaths);
+
+      if (filePaths.length === 0) return [];
+
+      const refinedPaths = filePaths.map((path) => {
+        return path.slice(59, path.length).replace(/\\/g, '/');
+      });
+      console.log(refinedPaths);
+      //Add songs to a song picker menu
+      setSongList(refinedPaths);
+      // console.log(filePaths);
+      // console.log('File paths received in React component:', filePaths);
     } catch (error) {
-      console.log('Error in React component while adding songs:', error);
+      console.error('Error in React component while adding songs:', error);
     }
+  }
+
+  function nextTrack() {
+    let currentSong = music.current._src;
+    let nextSong = '';
+    return () => {
+      for (let i = 0; i < songList.length; i++) {
+        if (songList[i - 1] === currentSong && songList[i] !== currentSong) {
+          nextSong = songList[i];
+          music.current._src = nextSong;
+        }
+      }
+    };
   }
 
   return (
@@ -113,7 +144,10 @@ function AudioControls({ setMusicData }) {
                 className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
               ></div>
               <span className="text-red-200 text-sm">3:15</span>
-              <TbFileMusic className="text-[#eec48a] text-xl row-start-2 " />
+              <TbFileMusic
+                onClick={handleAddingSongs}
+                className="text-[#eec48a] text-xl row-start-2 cursor-pointer"
+              />
               <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
               <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />
               {isPlaying ? (
@@ -131,13 +165,14 @@ function AudioControls({ setMusicData }) {
                 onClick={playPause}
                 className="row-start-2 text-[#7aa2f7] text-5xl "
               /> */}
-              <TbPlayerSkipForwardFilled className="text-[#4fd6be] text-2xl  row-start-2 " />
+              <TbPlayerSkipForwardFilled
+                className="text-[#4fd6be] text-2xl cursor-pointer  row-start-2 "
+                onClick={() => {
+                  nextTrack();
+                }}
+              />
               <TbRepeat className="text-[#c069cb] text-xl  row-start-2 " />
               <TbVolume className="text-[#c53b4b] text-xl  row-start-2 " />
-              <button onClick={handleAddingSongs} className="bg-white rounded-xl w-8 h-8">
-                Open file
-              </button>
-              File path: <strong id="filePath"></strong>
             </div>
           </section>
           {/* <audio
@@ -155,4 +190,4 @@ function AudioControls({ setMusicData }) {
   );
 }
 
-export default AudioControls;
+export default AudioProcessing;

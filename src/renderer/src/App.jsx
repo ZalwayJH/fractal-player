@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import icons from './assets/icons.svg';
-import Visualizer from './components/Visualizer';
-import AudioControls from './components/menus/AudioControls';
+import Visualizer from './components/Visualizer/Visualizer';
+
 import TitleBar from './components/menus/TitleBar';
+import AudioProcessing from './components/Audio/AudioProcessing';
 
 function App() {
   const [musicData, setMusicData] = useState([]);
   return (
     <div className="bg-[#2f3241] h-full min-h-[650px]">
       <TitleBar />
-      <AudioControls setMusicData={setMusicData} />
+      <AudioProcessing setMusicData={setMusicData} />
       <Visualizer musicData={musicData} />
     </div>
   );
