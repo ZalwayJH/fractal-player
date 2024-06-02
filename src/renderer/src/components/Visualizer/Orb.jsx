@@ -4,8 +4,8 @@ import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
 import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
 import { KernelSize, Resolution } from 'postprocessing';
 import { MathUtils } from 'three';
-import orbFrag from '../shader/orbFrag.frag?raw';
-import orbVert from '../shader/orbVert.vert?raw';
+import orbFrag from '../../shader/orbFrag.frag?raw';
+import orbVert from '../../shader/orbVert.vert?raw';
 
 export default function Orb({ musicData }) {
   const mesh = useRef();

@@ -18,7 +18,7 @@ import {
   TbFileMusic
 } from 'react-icons/tb';
 
-import { openFileFromDirectory } from '../../API/windowAPIs';
+import { openFileFromDirectory, fileMetaData } from '../../API/windowAPIs';
 
 function AudioProcessing({ setMusicData }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -92,16 +92,16 @@ function AudioProcessing({ setMusicData }) {
   async function handleAddingSongs() {
     try {
       const filePaths = await openFileFromDirectory();
-
       if (filePaths.length === 0) return [];
+
+      handleGetFileMetaData(filePaths);
 
       const refinedPaths = filePaths.map((path) => {
         return path.slice(59, path.length).replace(/\\/g, '/');
       });
       console.log(refinedPaths);
-      //Add songs to a song picker menu
-      setSongList(refinedPaths);
-      // console.log(filePaths);
+      // //Add songs to a song picker menu
+      // setSongList(refinedPaths);
       // console.log('File paths received in React component:', filePaths);
     } catch (error) {
       console.error('Error in React component while adding songs:', error);
@@ -119,6 +119,11 @@ function AudioProcessing({ setMusicData }) {
         }
       }
     };
+  }
+
+  async function handleGetFileMetaData(truePath) {
+    const metadata = await fileMetaData(truePath);
+    console.log(metadata, 'dis my data');
   }
 
   return (
@@ -145,7 +150,9 @@ function AudioProcessing({ setMusicData }) {
               ></div>
               <span className="text-red-200 text-sm">3:15</span>
               <TbFileMusic
-                onClick={handleAddingSongs}
+                onClick={() => {
+                  handleAddingSongs();
+                }}
                 className="text-[#eec48a] text-xl row-start-2 cursor-pointer"
               />
               <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />

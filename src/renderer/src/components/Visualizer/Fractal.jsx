@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import fractalFrag from '../shader/fractalFrag.frag?raw';
-import fractalVert from '../shader/fractalVert.vert?raw';
+import fractalFrag from '../../shader/fractalFrag.frag?raw';
+import fractalVert from '../../shader/fractalVert.vert?raw';
 import { MathUtils } from 'three';
 
 export default function Fractal({ musicData }) {

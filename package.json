@@ -26,6 +26,8 @@
     "electron-updater": "^6.1.1",
     "howler": "^2.2.4",
     "lodash": "^4.17.21",
+    "music-metadata": "^7.13.0",
+    "music-metadata-browser": "^2.5.10",
     "postprocessing": "^6.34.1",
     "react-icons": "^5.1.0",
     "react-router-dom": "^6.23.1",

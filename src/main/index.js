@@ -1,8 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join } from 'path';
-import { createFileRoute, createURLRoute } from 'electron-router-dom';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
+const mm = require('music-metadata');
 
 async function createWindow() {
   // Create the browser window.
@@ -42,23 +42,24 @@ async function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+
 async function handleFileOpen() {
   return await dialog
     .showOpenDialog(BrowserWindow.mainWindow, {
       title: 'Select Songs or Playlists Folders',
       properties: ['OpenFile', 'multiSelections'],
       filters: [
-        { name: 'Songs (.mp3, .wav, .wma)', extensions: ['mp3', 'wav', 'wma'] },
+        { name: 'Songs (.mp3, .wav, .wma, .mpeg)', extensions: ['mp3', 'wav', 'wma', 'mpeg'] },
         { name: 'All Files', extensions: ['*'] }
       ]
     })
-    .then((result) => {
-      if (!result.canceled) {
-        console.log('file paths wre selected:', result.filePaths);
-        return result.filePaths;
-      } else {
+    .then(async (result) => {
+      if (result.canceled) {
         console.log('file dialogue was cancelled');
         return [];
+      } else {
+        // console.log('file paths wre selected:', result.filePaths);
+        return result.filePaths;
       }
     })
     .catch((error) => {
@@ -66,10 +67,39 @@ async function handleFileOpen() {
     });
 }
 
+async function handleMetaData(channel, filePathArray) {
+  if (!filePathArray) {
+    return;
+  }
+  try {
+    const fileMetadataPromises = filePathArray.map(async (filePath) => {
+      const metadata = await mm.parseFile(filePath);
+      return {
+        path: filePath,
+        album: metadata.common.album,
+        artist: metadata.common.artist,
+        title: metadata.common.title,
+        duration: metadata.format.duration,
+        artists: metadata.common.artists,
+        format: metadata.format,
+        picture: metadata.common.picture,
+        trackNumber: metadata.common.track.no,
+        encodersettings: metadata.common.encodersettings
+        // Add other metadata fields as needed
+      };
+    });
+
+    return Promise.all(fileMetadataPromises);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
   ipcMain.handle('dialog:openFile', handleFileOpen);
+  ipcMain.handle('get:metaData', handleMetaData);
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
@@ -103,6 +133,7 @@ ipcMain.on('maximize-window', () => {
 ipcMain.on('close-window', () => {
   BrowserWindow.getFocusedWindow().close();
 });
+
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
