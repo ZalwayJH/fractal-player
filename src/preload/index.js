@@ -16,11 +16,11 @@ const API = {
         ipcRenderer.on(channel, (event, ...args) => func(...args));
       }
     },
-    invoke: async (channel, data) => {
-      let validChannels = ['dialog:openFile', 'get:metaData'];
+    invoke: async (channel, filePath, data) => {
+      let validChannels = ['dialog:openFile', 'get:metaData', 'read-file'];
       if (validChannels.includes(channel)) {
         try {
-          const result = await ipcRenderer.invoke(channel, data);
+          const result = await ipcRenderer.invoke(channel, filePath, data);
           // console.log(result, 'in preload');
           return result;
         } catch (error) {

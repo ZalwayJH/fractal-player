@@ -25,6 +25,7 @@
     "@react-three/postprocessing": "^2.15.11",
     "electron-router-dom": "^1.0.5",
     "electron-updater": "^6.1.1",
+    "fs": "^0.0.1-security",
     "howler": "^2.2.4",
     "lodash": "^4.17.21",
     "music-metadata": "^7.13.0",

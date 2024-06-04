@@ -9,11 +9,23 @@ import {
   Button,
   Tabs
 } from '@material-tailwind/react';
+import { callFs } from '../../API/windowAPIs';
 
 function SongMenuCard({ addedTracks }) {
   const [filterText, setFilterText] = useState('');
+  const [tracks, setTracks] = useState([]);
 
-  const tableRows = addedTracks.map((track) => {
+  checkList();
+
+  async function checkList() {
+    const checkFile = await callFs('read-file');
+    setTracks(checkFile);
+    if (addedTracks.length !== 0) {
+      setTracks(addedTracks);
+    }
+  }
+
+  const tableRows = tracks.map((track) => {
     track.picture = [track.picture];
     track.duration = track.duration.toString().replace('.', ':');
     if (track.duration.length <= 3) {
@@ -31,15 +43,15 @@ function SongMenuCard({ addedTracks }) {
   const onFilter = (e) => {
     setFilterText(e.target.value);
   };
-  const tableHeaders = ['', 'Title', 'Artist', 'Album', 'Duration'];
+  const tableHeaders = ['Title', 'Artist', 'Album', 'Duration'];
 
-  console.log(tableRows);
   return (
     <Card className="h-full rounded-none max-w-[45%]  bg-black/[0.9] absolute z-20 overflow-scroll">
-      <CardHeader floated={false} shadow={false} className="rounded-none bg-black/[0.9]">
-        <div className="flex flex-col   items-center  justify-between  md:flex-row">
-          <div className="w-full  ">
+      <CardHeader floated={false} shadow={false} className="rounded-none bg-transparent">
+        <div className="flex flex-col my-4  placeholder:text-white  items-center  justify-between  md:flex-row">
+          <div className="w-full placeholder:text-white ">
             <Input
+              className="text-white label:text-white"
               label="Search"
               type="text"
               placeholder="Filter By Name"
@@ -67,16 +79,11 @@ function SongMenuCard({ addedTracks }) {
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map(({ path, picture, title, artist, album, duration }, index) => {
+          {filteredItems.map(({ path, title, artist, album, duration }, index) => {
             const isLast = index === tableRows.length - 1;
             const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
             return (
               <tr key={path}>
-                <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal text-white">
-                    {'cover'}
-                  </Typography>
-                </td>
                 <td className={classes}>
                   <Typography
                     variant="small"

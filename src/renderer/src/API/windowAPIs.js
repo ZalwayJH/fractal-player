@@ -27,5 +27,14 @@ async function fileMetaData(filePath) {
     return [];
   }
 }
+async function callFs(channel, filePath, data) {
+  try {
+    const result = await app.api.invoke(channel, filePath, data);
+    return result;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
 
-export { closeWindow, minimizeWindow, maximizeWindow, openFileFromDirectory, fileMetaData };
+export { closeWindow, minimizeWindow, maximizeWindow, openFileFromDirectory, fileMetaData, callFs };

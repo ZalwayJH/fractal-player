@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
+const fs = require('fs');
 const mm = require('music-metadata');
 
 async function createWindow() {
@@ -43,63 +44,12 @@ async function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
-async function handleFileOpen() {
-  return await dialog
-    .showOpenDialog(BrowserWindow.mainWindow, {
-      title: 'Select Songs or Playlists Folders',
-      properties: ['OpenFile', 'multiSelections'],
-      filters: [
-        { name: 'Songs (.mp3, .wav, .wma, .mpeg)', extensions: ['mp3', 'wav', 'wma', 'mpeg'] },
-        { name: 'All Files', extensions: ['*'] }
-      ]
-    })
-    .then(async (result) => {
-      if (result.canceled) {
-        console.log('file dialogue was cancelled');
-        return [];
-      } else {
-        // console.log('file paths wre selected:', result.filePaths);
-        return result.filePaths;
-      }
-    })
-    .catch((error) => {
-      console.log('error opening file dialog', error);
-    });
-}
-
-async function handleMetaData(channel, filePathArray) {
-  if (!filePathArray) {
-    return;
-  }
-  try {
-    const fileMetadataPromises = filePathArray.map(async (filePath) => {
-      const metadata = await mm.parseFile(filePath);
-      return {
-        path: filePath,
-        album: metadata.common.album || 'N/a',
-        artist: metadata.common.artist || 'N/a',
-        title: metadata.common.title || 'N/a',
-        duration: Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100 || 'N/a',
-        artists: metadata.common.artists || 'N/a',
-        format: metadata.format || 'N/a',
-        picture: metadata.common.picture || 'N/a',
-        trackNumber: metadata.common.track.no || 'N/a',
-        encodersettings: metadata.common.encodersettings || 'N/a'
-        // Add other metadata fields as needed
-      };
-    });
-
-    return Promise.all(fileMetadataPromises);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
   ipcMain.handle('dialog:openFile', handleFileOpen);
   ipcMain.handle('get:metaData', handleMetaData);
+  // ipcMain.handle('read-file', handleReadFile);
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
@@ -134,6 +84,118 @@ ipcMain.on('close-window', () => {
   BrowserWindow.getFocusedWindow().close();
 });
 
+async function handleFileOpen() {
+  return await dialog
+    .showOpenDialog(BrowserWindow.mainWindow, {
+      title: 'Select Songs or Playlists Folders',
+      properties: ['OpenFile', 'multiSelections'],
+      filters: [
+        { name: 'Songs (.mp3, .wav, .wma, .mpeg)', extensions: ['mp3', 'wav', 'wma', 'mpeg'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    })
+    .then(async (result) => {
+      if (result.canceled) {
+        console.log('file dialogue was cancelled');
+        return [];
+      } else {
+        // console.log('file paths wre selected:', result.filePaths);
+        return result.filePaths;
+      }
+    })
+    .catch((error) => {
+      console.log('error opening file dialog', error);
+    });
+}
+
+async function handleMetaData(channel, filePathArray) {
+  try {
+    const fileMetadataPromises = filePathArray.map(async (filePath) => {
+      const metadata = await mm.parseFile(filePath);
+      return {
+        path: filePath,
+        album: metadata.common.album || 'N/a',
+        artist: metadata.common.artist || 'N/a',
+        title: metadata.common.title || 'N/a',
+        duration: Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100 || 'N/a',
+        artists: metadata.common.artists || 'N/a',
+        format: metadata.format || 'N/a',
+        trackNumber: metadata.common.track.no || 'N/a'
+        // Add other metadata fields as needed
+      };
+    });
+    // fs.writeFile('../renderer/songList/trackList.txt', JSON.stringify(songListSet), (err) => {
+    //   if (err) {
+    //     console.error(err);
+    //   } else {
+    //     console.log('file written succesfully with the following contents:');
+    //     console.log(fs.readFileSync('../../songList/trackList.txt', 'utf-8'));
+    //   }
+    // });
+    return writeTracksToFile(
+      'src/renderer/songList/trackList.json',
+      Promise.all(fileMetadataPromises)
+    );
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function writeTracksToFile(filePath, data) {
+  const file = await handleReadFile();
+  const tracks = await data;
+  let combinedData = data;
+  //should be mapped!! extract paths from data and file then create new arrray?
+  if (file.length !== 0) {
+    combinedData = file;
+    for (let i = 0; i < file.length; i++) {
+      for (let j = 0; j < tracks.length; j++) {
+        if (file[i].path !== tracks[j]) {
+          combinedData.push(tracks[j]);
+        }
+      }
+    }
+  }
+
+  try {
+    fs.writeFile(
+      filePath,
+      JSON.stringify(await combinedData),
+      {
+        encoding: 'utf8',
+        flag: 'a'
+      },
+      (err) => {
+        if (err) console.log(err);
+        else {
+          console.log('success');
+        }
+      }
+    );
+    // return handleReadFile();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function handleReadFile() {
+  try {
+    // Use fs.promises.readFile for a proper async/await pattern
+    const filePath = 'src/renderer/songList/trackList.json';
+    const data = await fs.promises.readFile(filePath, 'utf8');
+
+    const trackList = data.length === 0 ? [] : JSON.parse(data);
+    return trackList;
+  } catch (error) {
+    console.error('here da err', error);
+  }
+}
+
+ipcMain.handle('read-file', async () => {
+  return await handleReadFile().then((result) => {
+    return result;
+  });
+});
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.

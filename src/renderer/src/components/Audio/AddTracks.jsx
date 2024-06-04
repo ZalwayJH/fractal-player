@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SongMenuCard from './SongMenuCard';
 import { TbFileMusic } from 'react-icons/tb';
 import { openFileFromDirectory, fileMetaData } from '../../API/windowAPIs';
+import { callFs } from '../../API/windowAPIs';
 
 function AddTracks({ setAddedTracks }) {
   async function handleAddingSongs() {
@@ -26,11 +27,15 @@ function AddTracks({ setAddedTracks }) {
   }
 
   async function handleGetFileMetaData(truePath) {
-    const songData = await fileMetaData(truePath);
-    const songListSet = new Set(songData);
-    const songListArray = Array.from(songListSet);
+    await fileMetaData(truePath);
+    const songData = await callFs('read-file');
+    console.log('song data', songData);
+    // const songListSet = new Set(songData);
+
+    // const songListArray = Array.from(songListSet);
     // console.log(songData);
-    setAddedTracks(songListArray);
+    // callFs('write-file', '../renderer/songList/track.txt', songListArray);
+    setAddedTracks(songData);
   }
 
   return (
