@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
 * {
   min-width: 0;
   /* background-color: #16161e; */

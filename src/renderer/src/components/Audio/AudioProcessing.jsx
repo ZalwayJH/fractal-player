@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import useSound from 'use-sound';
 import { Howl, Howler } from 'howler';
@@ -18,9 +18,9 @@ import {
   TbFileMusic
 } from 'react-icons/tb';
 
-import { openFileFromDirectory, fileMetaData } from '../../API/windowAPIs';
+import AddTracks from './AddTracks';
 
-function AudioProcessing({ setMusicData }) {
+function AudioProcessing({ setMusicData, setAddedTracks }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [songList, setSongList] = useState([RipandTear]);
   const animationFrameIdRef = useRef(null);
@@ -41,26 +41,24 @@ function AudioProcessing({ setMusicData }) {
         const smoothedDataArray = new Float32Array(bufferLength);
 
         function getAudioData() {
-          if (music.current.playing()) {
-            // analyser.getByteFrequencyData(dataArray);
-            analyser.getFloatTimeDomainData(dataArray);
-            //Lowpass filter on dataArray to smooth out signal
-            for (let i = 0; i < bufferLength; i++) {
-              if (dataArray[i] < 0) {
-                dataArray[i] = dataArray[i] * -1;
-              }
-              if (i === 0) {
-                smoothedDataArray[i] = dataArray[i];
-              } else {
-                smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
-              }
+          // analyser.getByteFrequencyData(dataArray);
+          analyser.getFloatTimeDomainData(dataArray);
+          //Lowpass filter on dataArray to smooth out signal
+          for (let i = 0; i < bufferLength; i++) {
+            if (dataArray[i] < 0) {
+              dataArray[i] = dataArray[i] * -1;
             }
-
-            setMusicData(smoothedDataArray);
-            // setMusicData(dataArray);
-            //    Call this function again to keep updating the dataArray
-            animationFrameIdRef.current = requestAnimationFrame(getAudioData);
+            if (i === 0) {
+              smoothedDataArray[i] = dataArray[i];
+            } else {
+              smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
+            }
           }
+
+          setMusicData(smoothedDataArray);
+          // setMusicData(dataArray);
+          //    Call this function again to keep updating the dataArray
+          animationFrameIdRef.current = requestAnimationFrame(getAudioData);
         }
 
         // Start retrieving audio data
@@ -75,7 +73,7 @@ function AudioProcessing({ setMusicData }) {
     })
   );
 
-  useEffect(() => {
+  useMemo(() => {
     music.current._src = songList;
   }, [songList]);
 
@@ -88,25 +86,6 @@ function AudioProcessing({ setMusicData }) {
       setIsPlaying(true);
     }
   };
-
-  async function handleAddingSongs() {
-    try {
-      const filePaths = await openFileFromDirectory();
-      if (filePaths.length === 0) return [];
-
-      handleGetFileMetaData(filePaths);
-
-      const refinedPaths = filePaths.map((path) => {
-        return path.slice(59, path.length).replace(/\\/g, '/');
-      });
-      console.log(refinedPaths);
-      // //Add songs to a song picker menu
-      // setSongList(refinedPaths);
-      // console.log('File paths received in React component:', filePaths);
-    } catch (error) {
-      console.error('Error in React component while adding songs:', error);
-    }
-  }
 
   function nextTrack() {
     let currentSong = music.current._src;
@@ -121,11 +100,6 @@ function AudioProcessing({ setMusicData }) {
     };
   }
 
-  async function handleGetFileMetaData(truePath) {
-    const metadata = await fileMetaData(truePath);
-    console.log(metadata, 'dis my data');
-  }
-
   return (
     <div>
       <div className="group ease-in-out duration-300">
@@ -133,7 +107,7 @@ function AudioProcessing({ setMusicData }) {
         // className={`z-10 right-5 left-5 bottom-0  rounded-md mx-auto h-6 min-w-min absolute  `}
         >
           <section className="z-10  bottom-5 right-5 left-5 lg:opacity-100 md:opacity-100 xsm:opacity-0 mx-auto max-w-[20em] min-w-[1em] absolute ease-out duration-300 transition-all bg-[#16161E]/90 ring-1 ring-white/[0.2] backdrop-blur-xl drop-shadow-lg  h-[19em] rounded-lg ">
-            <div className="flex gap-4 bg-slate-600 w-[18em] h-[12em] mt-4 mx-auto ">
+            <div className="flex gap-4 bg-blue-200 w-auto mx-3 h-[12em] mt-4 mx-auto ">
               <Link to="/orb">
                 <div className="bg-red-600  w-5 h-1" />
               </Link>
@@ -149,12 +123,7 @@ function AudioProcessing({ setMusicData }) {
                 className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
               ></div>
               <span className="text-red-200 text-sm">3:15</span>
-              <TbFileMusic
-                onClick={() => {
-                  handleAddingSongs();
-                }}
-                className="text-[#eec48a] text-xl row-start-2 cursor-pointer"
-              />
+              <AddTracks setAddedTracks={setAddedTracks} />
               <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
               <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />
               {isPlaying ? (

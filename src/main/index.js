@@ -76,15 +76,15 @@ async function handleMetaData(channel, filePathArray) {
       const metadata = await mm.parseFile(filePath);
       return {
         path: filePath,
-        album: metadata.common.album,
-        artist: metadata.common.artist,
-        title: metadata.common.title,
-        duration: metadata.format.duration,
-        artists: metadata.common.artists,
-        format: metadata.format,
-        picture: metadata.common.picture,
-        trackNumber: metadata.common.track.no,
-        encodersettings: metadata.common.encodersettings
+        album: metadata.common.album || 'N/a',
+        artist: metadata.common.artist || 'N/a',
+        title: metadata.common.title || 'N/a',
+        duration: Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100 || 'N/a',
+        artists: metadata.common.artists || 'N/a',
+        format: metadata.format || 'N/a',
+        picture: metadata.common.picture || 'N/a',
+        trackNumber: metadata.common.track.no || 'N/a',
+        encodersettings: metadata.common.encodersettings || 'N/a'
         // Add other metadata fields as needed
       };
     });
