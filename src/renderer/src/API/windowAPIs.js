@@ -17,9 +17,9 @@ async function openFileFromDirectory() {
     return [];
   }
 }
-async function fileMetaData(filePath) {
+async function writeFileMetaData(filePath, file) {
   try {
-    const result = await app.api.invoke('get:metaData', filePath);
+    const result = await app.api.invoke('write:metadata', filePath, file);
     // console.log(result);
     return result;
   } catch (error) {
@@ -27,9 +27,9 @@ async function fileMetaData(filePath) {
     return [];
   }
 }
-async function callFs(channel, filePath, data) {
+async function readFile(channel, filePath, data) {
   try {
-    const result = await app.api.invoke(channel, filePath, data);
+    const result = await app.api.invoke('read:file', filePath, data);
     return result;
   } catch (error) {
     console.error(error);
@@ -37,4 +37,11 @@ async function callFs(channel, filePath, data) {
   }
 }
 
-export { closeWindow, minimizeWindow, maximizeWindow, openFileFromDirectory, fileMetaData, callFs };
+export {
+  closeWindow,
+  minimizeWindow,
+  maximizeWindow,
+  openFileFromDirectory,
+  writeFileMetaData,
+  readFile
+};

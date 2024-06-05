@@ -17,7 +17,7 @@ const API = {
       }
     },
     invoke: async (channel, filePath, data) => {
-      let validChannels = ['dialog:openFile', 'get:metaData', 'read-file'];
+      let validChannels = ['dialog:openFile', 'write:metadata', 'read:file'];
       if (validChannels.includes(channel)) {
         try {
           const result = await ipcRenderer.invoke(channel, filePath, data);

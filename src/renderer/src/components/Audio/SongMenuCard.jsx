@@ -1,5 +1,5 @@
 // import { DataTable } from 'primereact/datatable';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Card,
   Typography,
@@ -9,25 +9,16 @@ import {
   Button,
   Tabs
 } from '@material-tailwind/react';
-import { callFs } from '../../API/windowAPIs';
+import { readFile } from '../../API/windowAPIs';
 
 function SongMenuCard({ addedTracks }) {
   const [filterText, setFilterText] = useState('');
   const [tracks, setTracks] = useState([]);
 
-  checkList();
+  // checkList();
 
-  async function checkList() {
-    const checkFile = await callFs('read-file');
-    setTracks(checkFile);
-    if (addedTracks.length !== 0) {
-      setTracks(addedTracks);
-    }
-  }
-
-  const tableRows = tracks.map((track) => {
-    track.picture = [track.picture];
-    track.duration = track.duration.toString().replace('.', ':');
+  const tableRows = addedTracks.map((track) => {
+    track.duration = track.duration.toString();
     if (track.duration.length <= 3) {
       track.duration = track.duration + '0';
     }

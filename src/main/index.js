@@ -48,7 +48,7 @@ app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
   ipcMain.handle('dialog:openFile', handleFileOpen);
-  ipcMain.handle('get:metaData', handleMetaData);
+  ipcMain.handle('write:metadata', handleMetaData);
   // ipcMain.handle('read-file', handleReadFile);
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -108,12 +108,13 @@ async function handleFileOpen() {
     });
 }
 
-async function handleMetaData(channel, filePathArray) {
+async function handleMetaData(channel, filePathArray, file) {
+  const path = 'src/renderer/songList/trackList.json';
   try {
     const fileMetadataPromises = filePathArray.map(async (filePath) => {
       const metadata = await mm.parseFile(filePath);
       return {
-        path: filePath,
+        path: filePath.replace(/\\/g, '/'),
         album: metadata.common.album || 'N/a',
         artist: metadata.common.artist || 'N/a',
         title: metadata.common.title || 'N/a',
@@ -132,43 +133,86 @@ async function handleMetaData(channel, filePathArray) {
     //     console.log(fs.readFileSync('../../songList/trackList.txt', 'utf-8'));
     //   }
     // });
-    return writeTracksToFile(
-      'src/renderer/songList/trackList.json',
-      Promise.all(fileMetadataPromises)
-    );
+    if (file.length === 0) {
+      return writeTracksToFile(path, Promise.all(fileMetadataPromises));
+    } else {
+      return addNewTracksToFile(file, path, Promise.all(fileMetadataPromises));
+    }
   } catch (error) {
     console.error(error);
   }
 }
 
-async function writeTracksToFile(filePath, data) {
-  const file = await handleReadFile();
-  const tracks = await data;
-  let combinedData = data;
-  //should be mapped!! extract paths from data and file then create new arrray?
-  if (file.length !== 0) {
-    combinedData = file;
-    for (let i = 0; i < file.length; i++) {
-      for (let j = 0; j < tracks.length; j++) {
-        if (file[i].path !== tracks[j]) {
-          combinedData.push(tracks[j]);
-        }
-      }
-    }
+async function addNewTracksToFile(file, path, data) {
+  const currentSongs = await file;
+  const newSongs = await data;
+  const uniqueSongs = new Set(currentSongs.map((track) => track.title));
+  const mergedSongs = [];
+
+  for (const track of currentSongs) {
+    mergedSongs.push(track);
   }
 
+  for (const track of newSongs) {
+    if (!uniqueSongs.has(track.title)) {
+      mergedSongs.push(track);
+    }
+  }
+  // const mergedSongs = [
+  //   ...currentSongs,
+  //   ...newSongs.filter((track) => !uniqueSongs.has(track.title))
+  // ];
   try {
     fs.writeFile(
-      filePath,
-      JSON.stringify(await combinedData),
+      path,
+      JSON.stringify(mergedSongs),
       {
         encoding: 'utf8',
-        flag: 'a'
+        flag: 'w',
+        mode: 0o666
       },
       (err) => {
         if (err) console.log(err);
         else {
-          console.log('success');
+          console.log('successfully updated file');
+        }
+      }
+    );
+    // return handleReadFile();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function writeTracksToFile(path, data) {
+  // const metadata = [];
+  // //should be mapped!! extract paths from data and file then create new arrray?
+  // if (file.length !== 0) {
+  //   metadata.push(Array.from(new Set([...file, ...tracks])));
+  // }
+
+  // combinedData = file;
+  // for (let i = 0; i < file.length; i++) {
+  //   for (let j = 0; j < tracks.length; j++) {
+  //     if (file[i].path !== tracks[j]) {
+  //       combinedData.push(tracks[j]);
+  //     }
+  //   }
+  // }
+
+  try {
+    fs.writeFile(
+      path,
+      JSON.stringify(await data),
+      {
+        encoding: 'utf8',
+        flag: 'w',
+        mode: 0o666
+      },
+      (err) => {
+        if (err) console.log(err);
+        else {
+          console.log('successfully made first write');
         }
       }
     );
@@ -191,7 +235,7 @@ async function handleReadFile() {
   }
 }
 
-ipcMain.handle('read-file', async () => {
+ipcMain.handle('read:file', async () => {
   return await handleReadFile().then((result) => {
     return result;
   });

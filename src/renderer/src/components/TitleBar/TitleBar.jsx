@@ -23,7 +23,7 @@ function TitleBar() {
       ></button>
       <button
         id="titleButtonsClose"
-        className="rounded-xl z-30 p-2 backdrop-blur-xl bg-white/[0.1]  hover:bg-rose-400/[1] ring-white/[0.2] ring-1 hover:shadow-[0px_0px_10px_1px_#c53b53]"
+        className="rounded-xl z-30 p-2 backdrop-blur-xl bg-white/[0.1]  hover:bg-rose-500/[1] ring-white/[0.2] ring-1 hover:shadow-[0px_0px_10px_1px_#c53b53]"
         onClick={() => {
           closeWindow('close-window');
         }}
