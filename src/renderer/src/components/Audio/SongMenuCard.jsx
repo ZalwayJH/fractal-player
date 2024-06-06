@@ -37,15 +37,15 @@ function SongMenuCard({ addedTracks }) {
   const tableHeaders = ['Title', 'Artist', 'Album', 'Duration'];
 
   return (
-    <Card className="h-full rounded-none max-w-[45%]  bg-black/[0.9] absolute z-20 overflow-scroll">
-      <CardHeader floated={false} shadow={false} className="rounded-none bg-transparent">
-        <div className="flex flex-col my-4  placeholder:text-white  items-center  justify-between  md:flex-row">
-          <div className="w-full placeholder:text-white ">
+    <Card className="h-full rounded-none max-w-[45%]  bg-black/[0.9] fixed z-20 overflow-scroll">
+      <CardHeader floated={false} shadow={false} className="rounded-none  bg-transparent">
+        <div className="flex flex-col my-5 items-center ">
+          <div className="fixed ml-[0.40rem]  top-3">
             <Input
-              className="text-white label:text-white"
+              className="group-focus-within:text-white"
               label="Search"
               type="text"
-              placeholder="Filter By Name"
+              color="white"
               aria-label="Search Input"
               value={filterText}
               onChange={onFilter}
@@ -72,7 +72,7 @@ function SongMenuCard({ addedTracks }) {
         <tbody>
           {filteredItems.map(({ path, title, artist, album, duration }, index) => {
             const isLast = index === tableRows.length - 1;
-            const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
+            const classes = isLast ? 'p-2' : 'p-2 border-b border-blue-gray-50';
             return (
               <tr key={path}>
                 <td className={classes}>
@@ -85,7 +85,7 @@ function SongMenuCard({ addedTracks }) {
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal text-white">
+                  <Typography variant="small" color="blue-gray" className="font-normal  text-white">
                     {artist}
                   </Typography>
                 </td>

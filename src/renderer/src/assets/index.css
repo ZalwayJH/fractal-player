@@ -28,6 +28,7 @@ html {
   --tkForthary: #c53b53;
   --tkFithary: #4fd6be;
   --tkSixthary: #ff9e64;
+  /* --tkForthary: #ff4766; */
 }
 
 body {
@@ -103,18 +104,23 @@ audio::-webkit-media-controls-volume-slider {
 /* width */
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  padding: 10px;
+  margin: 20px;
+  width: 5px;
+  height: 5px;
+  background-color: none;
+
+  cursor: all-scroll;
 }
 
 /* Track */
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(158, 221, 255);
+  background: rgb(148, 148, 148);
   border-radius: 10px;
-  width: 2px;
-  margin: 50px;
-  padding: 40px;
+  cursor: pointer;
+  user-select: none;
 }
 ::-webkit-scrollbar-corner {
   display: none;

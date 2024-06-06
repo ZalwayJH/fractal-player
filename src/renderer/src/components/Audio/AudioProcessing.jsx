@@ -106,8 +106,8 @@ function AudioProcessing({ setMusicData, setAddedTracks }) {
         <div
         // className={`z-10 right-5 left-5 bottom-0  rounded-md mx-auto h-6 min-w-min absolute  `}
         >
-          <section className="z-10  bottom-5 right-5 left-5 lg:opacity-100 md:opacity-100 xsm:opacity-0 mx-auto max-w-[20em] min-w-[1em] absolute ease-out duration-300 transition-all bg-[#16161E]/90 ring-1 ring-white/[0.2] backdrop-blur-xl drop-shadow-lg  h-[19em] rounded-lg ">
-            <div className="flex gap-4 bg-blue-200 w-auto mx-3 h-[12em] mt-4 mx-auto ">
+          <section className="z-10  bottom-5 right-5 left-5 lg:opacity-100 md:opacity-100 xsm:opacity-0 mx-auto max-w-[20em] min-w-[1em] fixed ease-out duration-300 transition-all bg-[#16161E]/90 ring-1 ring-white/[0.2] backdrop-blur-xl drop-shadow-lg  h-[19em] rounded-lg ">
+            <div className="flex gap-4 bg-blue-200 w-auto  h-[12em] mt-4 mx-auto ">
               <Link to="/orb">
                 <div className="bg-red-600  w-5 h-1" />
               </Link>

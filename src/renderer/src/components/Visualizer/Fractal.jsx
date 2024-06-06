@@ -28,8 +28,6 @@ export default function Fractal({ musicData }) {
       materialRef.current.uniforms.iTime.value = clock.getElapsedTime();
       materialRef.current.uniforms.iResolution.value = [viewport.width, viewport.height];
       materialRef.current.uniforms.iFrequency.value = frequency;
-      // for (let i = 0; i < 1024; i++) {
-      // }
     }
   });
 

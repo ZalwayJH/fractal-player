@@ -90,7 +90,7 @@ async function handleFileOpen() {
       title: 'Select Songs or Playlists Folders',
       properties: ['OpenFile', 'multiSelections'],
       filters: [
-        { name: 'Songs (.mp3, .wav, .wma, .mpeg)', extensions: ['mp3', 'wav', 'wma', 'mpeg'] },
+        { name: 'Songs (.mp3, .wav, .wma, .mpeg)', extensions: ['mp3', 'wav', 'wma', 'webm'] },
         { name: 'All Files', extensions: ['*'] }
       ]
     })
@@ -113,6 +113,8 @@ async function handleMetaData(channel, filePathArray, file) {
   try {
     const fileMetadataPromises = filePathArray.map(async (filePath) => {
       const metadata = await mm.parseFile(filePath);
+      const cover = mm.selectCover(metadata.common.picture); // pick the cover image
+
       return {
         path: filePath.replace(/\\/g, '/'),
         album: metadata.common.album || 'N/a',
@@ -121,7 +123,8 @@ async function handleMetaData(channel, filePathArray, file) {
         duration: Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100 || 'N/a',
         artists: metadata.common.artists || 'N/a',
         format: metadata.format || 'N/a',
-        trackNumber: metadata.common.track.no || 'N/a'
+        trackNumber: metadata.common.track.no || 'N/a',
+        cover: cover
         // Add other metadata fields as needed
       };
     });

@@ -8,7 +8,7 @@ import { readFile } from './API/windowAPIs';
 
 function App() {
   return (
-    <div className="bg-[#2f3241] h-full min-h-[650px]">
+    <div className="bg-[#2f3241] h-full min-h-[800px]">
       <TitleBar />
       <Player />
     </div>
