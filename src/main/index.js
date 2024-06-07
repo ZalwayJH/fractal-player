@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 const fs = require('fs');
 const mm = require('music-metadata');
-
+import { inspect } from 'util';
 async function createWindow() {
   // Create the browser window.
 
@@ -108,8 +108,9 @@ async function handleFileOpen() {
     });
 }
 
-async function handleMetaData(channel, filePathArray, file) {
+async function handleMetaData(channel, filePathArray) {
   const path = 'src/renderer/songList/trackList.json';
+  const file = await handleReadFile();
   try {
     const fileMetadataPromises = filePathArray.map(async (filePath) => {
       const metadata = await mm.parseFile(filePath);
@@ -123,19 +124,12 @@ async function handleMetaData(channel, filePathArray, file) {
         duration: Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100 || 'N/a',
         artists: metadata.common.artists || 'N/a',
         format: metadata.format || 'N/a',
-        trackNumber: metadata.common.track.no || 'N/a',
-        cover: cover
+        trackNumber: metadata.common.track.no || 'N/a'
+        // cover: cover
         // Add other metadata fields as needed
       };
     });
-    // fs.writeFile('../renderer/songList/trackList.txt', JSON.stringify(songListSet), (err) => {
-    //   if (err) {
-    //     console.error(err);
-    //   } else {
-    //     console.log('file written succesfully with the following contents:');
-    //     console.log(fs.readFileSync('../../songList/trackList.txt', 'utf-8'));
-    //   }
-    // });
+
     if (file.length === 0) {
       return writeTracksToFile(path, Promise.all(fileMetadataPromises));
     } else {
@@ -161,10 +155,7 @@ async function addNewTracksToFile(file, path, data) {
       mergedSongs.push(track);
     }
   }
-  // const mergedSongs = [
-  //   ...currentSongs,
-  //   ...newSongs.filter((track) => !uniqueSongs.has(track.title))
-  // ];
+
   try {
     fs.writeFile(
       path,
@@ -181,28 +172,12 @@ async function addNewTracksToFile(file, path, data) {
         }
       }
     );
-    // return handleReadFile();
   } catch (error) {
     console.error(error);
   }
 }
 
 async function writeTracksToFile(path, data) {
-  // const metadata = [];
-  // //should be mapped!! extract paths from data and file then create new arrray?
-  // if (file.length !== 0) {
-  //   metadata.push(Array.from(new Set([...file, ...tracks])));
-  // }
-
-  // combinedData = file;
-  // for (let i = 0; i < file.length; i++) {
-  //   for (let j = 0; j < tracks.length; j++) {
-  //     if (file[i].path !== tracks[j]) {
-  //       combinedData.push(tracks[j]);
-  //     }
-  //   }
-  // }
-
   try {
     fs.writeFile(
       path,
@@ -219,7 +194,6 @@ async function writeTracksToFile(path, data) {
         }
       }
     );
-    // return handleReadFile();
   } catch (error) {
     console.error(error);
   }

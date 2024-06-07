@@ -27,9 +27,9 @@ async function writeFileMetaData(filePath, file) {
     return [];
   }
 }
-async function readFile(channel, filePath, data) {
+async function readFile() {
   try {
-    const result = await app.api.invoke('read:file', filePath, data);
+    const result = await app.api.invoke('read:file');
     return result;
   } catch (error) {
     console.error(error);

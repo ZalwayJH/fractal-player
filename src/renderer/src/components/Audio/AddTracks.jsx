@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import SongMenuCard from './SongMenuCard';
 import { TbFileMusic } from 'react-icons/tb';
 import { openFileFromDirectory, writeFileMetaData } from '../../API/windowAPIs';
 import { readFile } from '../../API/windowAPIs';
 
-function AddTracks({ setAddedTracks }) {
+function AddTracks({ setTracksList }) {
   async function handleAddingSongs() {
     try {
       const filePaths = await openFileFromDirectory();
       if (filePaths.length === 0) return [];
 
-      handleGetFileMetaData(filePaths);
-
+      // handleGetFileMetaData(filePaths);
+      await writeFileMetaData(filePaths);
+      const songData = await readFile();
+      setTracksList(songData);
       // refined paths is temporary and will only work for me.
       // will need to see if i can get Howler to use absolute path instead of relative
       const refinedPaths = filePaths.map((path) => {
@@ -26,20 +26,7 @@ function AddTracks({ setAddedTracks }) {
     }
   }
 
-  async function handleGetFileMetaData(truePath) {
-    const file = await readFile();
-
-    await writeFileMetaData(truePath, file);
-    const songData = await readFile();
-    setAddedTracks(songData);
-
-    console.log('song data', songData);
-    // const songListSet = new Set(songData);
-
-    // const songListArray = Array.from(songListSet);
-    // console.log(songData);
-    //
-  }
+  // async function handleGetFileMetaData(truePath) {}
 
   return (
     <>

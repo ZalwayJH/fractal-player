@@ -11,13 +11,14 @@ import {
 } from '@material-tailwind/react';
 import { readFile } from '../../API/windowAPIs';
 
-function SongMenuCard({ addedTracks }) {
+function SongMenuCard({ tracksList, initTrackList }) {
   const [filterText, setFilterText] = useState('');
   const [tracks, setTracks] = useState([]);
 
   // checkList();
+  console.log('song menu');
 
-  const tableRows = addedTracks.map((track) => {
+  const tableRows = tracksList.map((track) => {
     track.duration = track.duration.toString();
     if (track.duration.length <= 3) {
       track.duration = track.duration + '0';

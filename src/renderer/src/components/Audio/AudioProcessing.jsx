@@ -20,7 +20,7 @@ import {
 
 import AddTracks from './AddTracks';
 
-function AudioProcessing({ setMusicData, setAddedTracks }) {
+function AudioProcessing({ setMusicData, setTracksList }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [songList, setSongList] = useState([RipandTear]);
   const animationFrameIdRef = useRef(null);
@@ -73,10 +73,6 @@ function AudioProcessing({ setMusicData, setAddedTracks }) {
     })
   );
 
-  useMemo(() => {
-    music.current._src = songList;
-  }, [songList]);
-
   const playPause = () => {
     if (isPlaying) {
       music.current.pause();
@@ -87,19 +83,7 @@ function AudioProcessing({ setMusicData, setAddedTracks }) {
     }
   };
 
-  function nextTrack() {
-    let currentSong = music.current._src;
-    let nextSong = '';
-    return () => {
-      for (let i = 0; i < songList.length; i++) {
-        if (songList[i - 1] === currentSong && songList[i] !== currentSong) {
-          nextSong = songList[i];
-          music.current._src = nextSong;
-        }
-      }
-    };
-  }
-
+  console.log('audio proc');
   return (
     <div>
       <div className="group ease-in-out duration-300">
@@ -123,7 +107,7 @@ function AudioProcessing({ setMusicData, setAddedTracks }) {
                 className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
               ></div>
               <span className="text-red-200 text-sm">3:15</span>
-              <AddTracks setAddedTracks={setAddedTracks} />
+              <AddTracks setTracksList={setTracksList} />
               <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
               <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />
               {isPlaying ? (
@@ -141,12 +125,7 @@ function AudioProcessing({ setMusicData, setAddedTracks }) {
                 onClick={playPause}
                 className="row-start-2 text-[#7aa2f7] text-5xl "
               /> */}
-              <TbPlayerSkipForwardFilled
-                className="text-[#4fd6be] text-2xl cursor-pointer  row-start-2 "
-                onClick={() => {
-                  nextTrack();
-                }}
-              />
+              <TbPlayerSkipForwardFilled className="text-[#4fd6be] text-2xl cursor-pointer  row-start-2 " />
               <TbRepeat className="text-[#c069cb] text-xl  row-start-2 " />
               <TbVolume className="text-[#c53b4b] text-xl  row-start-2 " />
             </div>
