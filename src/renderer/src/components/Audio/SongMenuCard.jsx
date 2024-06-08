@@ -11,12 +11,8 @@ import {
 } from '@material-tailwind/react';
 import { readFile } from '../../API/windowAPIs';
 
-function SongMenuCard({ tracksList, initTrackList }) {
+function SongMenuCard({ tracksList }) {
   const [filterText, setFilterText] = useState('');
-  const [tracks, setTracks] = useState([]);
-
-  // checkList();
-  console.log('song menu');
 
   const tableRows = tracksList.map((track) => {
     track.duration = track.duration.toString();
@@ -38,12 +34,16 @@ function SongMenuCard({ tracksList, initTrackList }) {
   const tableHeaders = ['Title', 'Artist', 'Album', 'Duration'];
 
   return (
-    <Card className="h-full rounded-none max-w-[45%]  bg-black/[0.9] fixed z-20 overflow-scroll">
-      <CardHeader floated={false} shadow={false} className="rounded-none  bg-transparent">
-        <div className="flex flex-col my-5 items-center ">
-          <div className="fixed ml-[0.40rem]  top-3">
+    <Card className="h-full rounded-none w-full max-w-[35%] bg-black/[0.9] fixed z-20 overflow-scroll">
+      <CardHeader
+        floated={false}
+        shadow={false}
+        className="rounded-none h-[45px] mb-4 bg-transparent"
+      >
+        <div className="flex flex-col my-5  items-center ">
+          <div className="fixed ml-[0.40rem] w-3/12   top-7">
             <Input
-              className="group-focus-within:text-white"
+              className=" w-full"
               label="Search"
               type="text"
               color="white"
@@ -54,7 +54,7 @@ function SongMenuCard({ tracksList, initTrackList }) {
           </div>
         </div>
       </CardHeader>
-      <table className="w-full min-w-max table-auto text-left">
+      <table className="w-full mt-3  table-auto text-left">
         <thead>
           <tr>
             {tableHeaders.map((head) => (
@@ -80,23 +80,35 @@ function SongMenuCard({ tracksList, initTrackList }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal truncate max-w-[150px] text-white  "
+                    className="font-normal truncate w-[100px] text-white  "
                   >
                     {title}
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal  text-white">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal  w-[100px]  text-white"
+                  >
                     {artist}
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal text-white">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal w-[100px] text-white"
+                  >
                     {album}
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal text-white">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal w-[100px] pl-4 text-white"
+                  >
                     {duration}
                   </Typography>
                 </td>

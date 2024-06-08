@@ -7,20 +7,13 @@ function AddTracks({ setTracksList }) {
     try {
       const filePaths = await openFileFromDirectory();
       if (filePaths.length === 0) return [];
-
-      // handleGetFileMetaData(filePaths);
       await writeFileMetaData(filePaths);
       const songData = await readFile();
       setTracksList(songData);
-      // refined paths is temporary and will only work for me.
-      // will need to see if i can get Howler to use absolute path instead of relative
-      const refinedPaths = filePaths.map((path) => {
-        return path.slice(59, path.length);
-      });
-      //   console.log(refinedPaths);
-      // //Add songs to a song picker menu
-      // setSongList(refinedPaths);
-      // console.log('File paths received in React component:', filePaths);
+
+      //const refinedPaths = filePaths.map((path) => {
+      //return path.slice(59, path.length);
+      //});
     } catch (error) {
       console.error('Error in React component while adding songs:', error);
     }

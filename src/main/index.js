@@ -109,7 +109,7 @@ async function handleFileOpen() {
 }
 
 async function handleMetaData(channel, filePathArray) {
-  const path = 'src/renderer/songList/trackList.json';
+  const path = 'src/renderer/src/songList/trackList.json';
   const file = await handleReadFile();
   try {
     const fileMetadataPromises = filePathArray.map(async (filePath) => {
@@ -202,7 +202,7 @@ async function writeTracksToFile(path, data) {
 async function handleReadFile() {
   try {
     // Use fs.promises.readFile for a proper async/await pattern
-    const filePath = 'src/renderer/songList/trackList.json';
+    const filePath = 'src/renderer/src/songList/trackList.json';
     const data = await fs.promises.readFile(filePath, 'utf8');
 
     const trackList = data.length === 0 ? [] : JSON.parse(data);
