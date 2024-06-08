@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import AudioProcessing from './Audio/AudioProcessing';
 import SongMenuCard from './Audio/SongMenuCard';
 import Visualizer from './Visualizer/Visualizer';
-import { useQuery } from 'react-query';
-import { readFile } from '../API/windowAPIs';
+
 import { useGetTrackList } from '../hooks/useGetTrackList';
 function Player() {
   const [musicData, setMusicData] = useState([]);
