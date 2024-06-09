@@ -1,5 +1,5 @@
 // import { DataTable } from 'primereact/datatable';
-import { useState, useMemo, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Card,
   Typography,
@@ -9,9 +9,8 @@ import {
   Button,
   Tabs
 } from '@material-tailwind/react';
-import { readFile } from '../../API/windowAPIs';
 
-function SongMenuCard({ tracksList }) {
+function SongMenuCard({ tracksList, setSelectedSong }) {
   const [filterText, setFilterText] = useState('');
 
   const tableRows = tracksList.map((track) => {
@@ -34,7 +33,7 @@ function SongMenuCard({ tracksList }) {
   const tableHeaders = ['Title', 'Artist', 'Album', 'Duration'];
 
   return (
-    <Card className="h-full rounded-none w-full max-w-[35%] bg-black/[0.9] fixed z-20 overflow-scroll">
+    <Card className="h-full select-none rounded-none w-full max-w-[35%] bg-black/[0.9] fixed z-20 overflow-scroll">
       <CardHeader
         floated={false}
         shadow={false}
@@ -72,10 +71,18 @@ function SongMenuCard({ tracksList }) {
         </thead>
         <tbody>
           {filteredItems.map(({ path, title, artist, album, duration }, index) => {
-            const isLast = index === tableRows.length - 1;
-            const classes = isLast ? 'p-2' : 'p-2 border-b border-blue-gray-50';
+            const isLast = index === filteredItems.length - 1;
+            const classes = isLast
+              ? 'p-2 cursor-pointer truncate w-[100px]'
+              : 'p-2 border-b border-blue-gray-50 cursor-pointer  truncate w-[100px]';
             return (
-              <tr key={path}>
+              <tr
+                key={path}
+                onClick={() => {
+                  setSelectedSong(path);
+                }}
+                className=" hover:bg-gray-800"
+              >
                 <td className={classes}>
                   <Typography
                     variant="small"

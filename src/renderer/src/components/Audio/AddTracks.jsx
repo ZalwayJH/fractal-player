@@ -10,16 +10,14 @@ function AddTracks({ setTracksList }) {
       await writeFileMetaData(filePaths);
       const songData = await readFile();
       setTracksList(songData);
-
+    } catch (error) {
+      console.error('Error in React component while adding songs:', error.message);
+      throw new Error(error.message);
       //const refinedPaths = filePaths.map((path) => {
       //return path.slice(59, path.length);
       //});
-    } catch (error) {
-      console.error('Error in React component while adding songs:', error);
     }
   }
-
-  // async function handleGetFileMetaData(truePath) {}
 
   return (
     <>

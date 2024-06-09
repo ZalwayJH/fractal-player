@@ -4,6 +4,9 @@ export function useGetAudioFTDD(song) {
   const [songData, setSongData] = useState([]);
   const animationFrameIdRef = useRef(null);
 
+  //const refinedPaths = filePaths.map((path) => {
+  //return path.slice(59, path.length);
+  //});
   const music = useRef(
     new Howl({
       src: [...song],
@@ -48,6 +51,9 @@ export function useGetAudioFTDD(song) {
       },
       onstop: function () {
         cancelAnimationFrame(animationFrameIdRef.current);
+      },
+      onselect: function () {
+        //set current song _src ?
       }
     })
   );
