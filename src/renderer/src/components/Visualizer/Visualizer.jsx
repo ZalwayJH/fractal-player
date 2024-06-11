@@ -5,7 +5,6 @@ import Fractal from './Fractal';
 import Orb from './orb';
 
 function Visualizer({ musicData }) {
-  console.log('vis');
   return (
     <div className="h-full z-0">
       <Canvas camera={{ position: [0.0, 0.0, 8.0] }}>

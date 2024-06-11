@@ -9,19 +9,23 @@ import {
   Button,
   Tabs
 } from '@material-tailwind/react';
+import { useGetTrackList } from '../../hooks/useGetTrackList';
+import AddTracks from './AddTracks';
 
-function SongMenuCard({ tracksList, setSelectedSong }) {
+function TracksMenu({ setSelectedSong }) {
   const [filterText, setFilterText] = useState('');
+  const { tracks, setTracks, status, error } = useGetTrackList();
 
-  const tableRows = tracksList.map((track) => {
-    track.duration = track.duration.toString();
-    if (track.duration.length <= 3) {
-      track.duration = track.duration + '0';
-    }
-    return track;
-  });
+  let tracksList = [];
+  if (error) {
+    throw new Error(error.message);
+  }
 
-  const filteredItems = tableRows.filter(
+  if (status === 'success') {
+    tracksList = tracks;
+  }
+
+  const filteredItems = tracksList.filter(
     (item) =>
       (item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.album && item.album.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -33,14 +37,11 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
   const tableHeaders = ['Title', 'Artist', 'Album', 'Duration'];
 
   return (
-    <Card className="h-full select-none rounded-none w-full max-w-[35%] bg-black/[0.9] fixed z-20 overflow-scroll">
-      <CardHeader
-        floated={false}
-        shadow={false}
-        className="rounded-none h-[45px] mb-4 bg-transparent"
-      >
-        <div className="flex flex-col my-5  items-center ">
-          <div className="fixed ml-[0.40rem] w-3/12   top-7">
+    <Card className="h-full select-none rounded-none  w-full max-w-[25%] bg-white/[0.4] backdrop-blur-xl fixed z-20 overflow-scroll">
+      <AddTracks setTracksList={setTracks} />
+      <CardHeader floated={false} shadow={false} className=" h-[45px] mb-4 bg-transparent">
+        <div className="flex flex-col my-5   items-center ">
+          <div className="fixed ml-[0.40rem]  top-7">
             <Input
               className=" w-full"
               label="Search"
@@ -53,7 +54,7 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
           </div>
         </div>
       </CardHeader>
-      <table className="w-full mt-3  table-auto text-left">
+      <table className="w-full mt-3 table-auto text-left">
         <thead>
           <tr>
             {tableHeaders.map((head) => (
@@ -61,7 +62,7 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none text-white opacity-70"
+                  className="font-normal leading-none  text-white opacity-70"
                 >
                   {head}
                 </Typography>
@@ -72,22 +73,21 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
         <tbody>
           {filteredItems.map(({ path, title, artist, album, duration }, index) => {
             const isLast = index === filteredItems.length - 1;
-            const classes = isLast
-              ? 'p-2 cursor-pointer truncate w-[100px]'
-              : 'p-2 border-b border-blue-gray-50 cursor-pointer  truncate w-[100px]';
+            const classes =
+              'p-2 border-b border-blue-gray-50/[0.2] cursor-pointer text-xs truncate w-[100px]';
             return (
               <tr
                 key={path}
                 onClick={() => {
                   setSelectedSong(path);
                 }}
-                className=" hover:bg-gray-800"
+                className=" hover:bg-gray-800/[0.5]"
               >
                 <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal truncate w-[100px] text-white  "
+                    className="font-semibold text-black truncate w-[100px] text-xs "
                   >
                     {title}
                   </Typography>
@@ -96,7 +96,7 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal  w-[100px]  text-white"
+                    className="font-normal  w-[100px] text-xs text-black  "
                   >
                     {artist}
                   </Typography>
@@ -105,7 +105,7 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[100px] text-white"
+                    className="font-normal w-[100px] text-xs text-black"
                   >
                     {album}
                   </Typography>
@@ -114,7 +114,7 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[100px] pl-4 text-white"
+                    className="font-normal w-[100px] text-xs pl-4 text-black"
                   >
                     {duration}
                   </Typography>
@@ -128,4 +128,4 @@ function SongMenuCard({ tracksList, setSelectedSong }) {
   );
 }
 
-export default SongMenuCard;
+export default TracksMenu;

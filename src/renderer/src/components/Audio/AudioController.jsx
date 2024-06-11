@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import useSound from 'use-sound';
-import { Howl, Howler } from 'howler';
+
 import audioMoe from '../../songs/audoMoe.mp3';
 import neverFadeAway from '../../songs/neverfadeaway.mp3';
 import rebelpath from '../../songs/rebel path.mp3';
@@ -18,19 +17,17 @@ import {
   TbFileMusic
 } from 'react-icons/tb';
 import { useGetAudioFTDD } from '../../hooks/useGetAudioFTDD';
-import AddTracks from './AddTracks';
 
-function AudioProcessing({ setMusicData, setTracksList, selectedSong }) {
+function AudioController({ setMusicData, selectedSong }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [songList, setSongList] = useState([RipandTear]);
 
-  // const animationFrameIdRef = useRef(null);
   const { songData, music } = useGetAudioFTDD(songList, selectedSong);
+
   useEffect(() => {
     setMusicData(songData);
-    console.log(selectedSong, 'in useEffect');
   }, [songData, selectedSong]);
-  console.log(selectedSong, 'outside useeffect');
+
   const playPause = () => {
     if (isPlaying) {
       music.current.pause();
@@ -41,7 +38,6 @@ function AudioProcessing({ setMusicData, setTracksList, selectedSong }) {
     }
   };
 
-  console.log('audio proc');
   return (
     <div>
       <div className="group ease-in-out duration-300">
@@ -65,7 +61,11 @@ function AudioProcessing({ setMusicData, setTracksList, selectedSong }) {
                 className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
               ></div>
               <span className="text-red-200 text-sm">3:15</span>
-              <AddTracks setTracksList={setTracksList} />
+              <div>
+                <p>open</p>
+              </div>
+              {/* 
+              <AddTracks setTracksList={setTracksList} /> */}
               <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
               <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />
               {isPlaying ? (
@@ -103,4 +103,4 @@ function AudioProcessing({ setMusicData, setTracksList, selectedSong }) {
   );
 }
 
-export default AudioProcessing;
+export default AudioController;

@@ -115,13 +115,15 @@ async function handleMetaData(channel, filePathArray) {
     const fileMetadataPromises = filePathArray.map(async (filePath) => {
       const metadata = await mm.parseFile(filePath);
       const cover = mm.selectCover(metadata.common.picture); // pick the cover image
-
+      const duration = (
+        Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100
+      ).toString();
       return {
         path: filePath.replace(/\\/g, '/'),
         album: metadata.common.album || 'N/a',
         artist: metadata.common.artist || 'N/a',
         title: metadata.common.title || 'N/a',
-        duration: Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100 || 'N/a',
+        duration: duration.length < 3 ? duration + '0' : duration,
         artists: metadata.common.artists || 'N/a',
         format: metadata.format || 'N/a',
         trackNumber: metadata.common.track.no || 'N/a'

@@ -2,12 +2,12 @@ import { useCallback, useState, useEffect } from 'react';
 import { readFile } from '../API/windowAPIs';
 import { useQuery } from 'react-query';
 
-function useGetTrackList() {
-  const [tracksList, setTracksList] = useState([]);
+export function useGetTrackList() {
+  const [tracks, setTracks] = useState([]);
   const getTrackList = useCallback(async () => {
     const list = await readFile();
     return list;
-  }, [tracksList]);
+  }, [tracks]);
   const { data, status, error } = useQuery({
     queryKey: ['getTrackList'],
     queryFn: getTrackList,
@@ -15,10 +15,9 @@ function useGetTrackList() {
   });
   useEffect(() => {
     if (status === 'success') {
-      setTracksList(data);
+      setTracks(data);
     }
   }, [status]);
 
-  return { tracksList: tracksList, setTracksList: setTracksList, error: error, status: status };
+  return { tracks: tracks, setTracks: setTracks, error: error, status: status };
 }
-export { useGetTrackList };
