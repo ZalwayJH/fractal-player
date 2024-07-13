@@ -11,7 +11,7 @@ import {
 } from '@material-tailwind/react';
 import { useGetTrackList } from '../../hooks/useGetTrackList';
 import AddTracks from './AddTracks';
-
+import defaultCover from '../../assets/fractalDefault.png';
 function TracksMenu({ setSelectedSong }) {
   const [filterText, setFilterText] = useState('');
   const { tracks, setTracks, status, error } = useGetTrackList();
@@ -24,7 +24,6 @@ function TracksMenu({ setSelectedSong }) {
   if (status === 'success') {
     tracksList = tracks;
   }
-
   const filteredItems = tracksList.filter(
     (item) =>
       (item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -34,10 +33,10 @@ function TracksMenu({ setSelectedSong }) {
   const onFilter = (e) => {
     setFilterText(e.target.value);
   };
-  const tableHeaders = ['Title', 'Artist', 'Album', 'Duration'];
+  const tableHeaders = ['', 'Title', 'Artist', 'Album', 'Duration'];
 
   return (
-    <Card className="h-full select-none rounded-none  w-full max-w-[25%] bg-white/[0.4] backdrop-blur-xl fixed z-20 overflow-scroll">
+    <Card className="h-full select-none rounded-none  w-full max-w-[25%] bg-[#1a1b26]/[1] backdrop-blur-xl fixed z-20 overflow-scroll">
       <AddTracks setTracksList={setTracks} />
       <CardHeader floated={false} shadow={false} className=" h-[45px] mb-4 bg-transparent">
         <div className="flex flex-col my-5   items-center ">
@@ -55,26 +54,11 @@ function TracksMenu({ setSelectedSong }) {
         </div>
       </CardHeader>
       <table className="w-full mt-3 table-auto text-left">
-        <thead>
-          <tr>
-            {tableHeaders.map((head) => (
-              <th key={head} className="border-b border-blue-gray-100 bg-black/[0.9]  p-4">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal leading-none  text-white opacity-70"
-                >
-                  {head}
-                </Typography>
-              </th>
-            ))}
-          </tr>
-        </thead>
         <tbody>
-          {filteredItems.map(({ path, title, artist, album, duration }, index) => {
+          {filteredItems.map(({ path, title, artist, album, duration, cover }, index) => {
             const isLast = index === filteredItems.length - 1;
-            const classes =
-              'p-2 border-b border-blue-gray-50/[0.2] cursor-pointer text-xs truncate w-[100px]';
+            let srcVal = cover !== null ? `data:image/png;base64, ${cover}` : defaultCover;
+            const classes = 'p-2 border-b border-blue-gray-50/[0.2]  cursor-pointer ';
             return (
               <tr
                 key={path}
@@ -83,11 +67,14 @@ function TracksMenu({ setSelectedSong }) {
                 }}
                 className=" hover:bg-gray-800/[0.5]"
               >
+                <td className="p-2 border-b border-blue-gray-50/[0.2]  cursor-pointer ">
+                  <img src={srcVal} width="30" height="30" className=" min-h-[30px]" />
+                </td>
                 <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-semibold text-black truncate w-[100px] text-xs "
+                    className="font-semibold text-gray-300 truncate w-[100px] text-xs "
                   >
                     {title}
                   </Typography>
@@ -96,7 +83,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal  w-[100px] text-xs text-black  "
+                    className="font-normal  w-[100px] text-xs text-gray-300  "
                   >
                     {artist}
                   </Typography>
@@ -105,7 +92,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[100px] text-xs text-black"
+                    className="font-normal w-[100px] text-xs text-gray-300"
                   >
                     {album}
                   </Typography>
@@ -114,7 +101,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[100px] text-xs pl-4 text-black"
+                    className="font-normal w-[100px] text-xs pl-4 text-gray-300"
                   >
                     {duration}
                   </Typography>

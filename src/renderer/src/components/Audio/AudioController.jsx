@@ -44,7 +44,7 @@ function AudioController({ setMusicData, selectedSong }) {
         <div
         // className={`z-10 right-5 left-5 bottom-0  rounded-md mx-auto h-6 min-w-min absolute  `}
         >
-          <section className="z-10  bottom-5 right-5 left-5 lg:opacity-100 md:opacity-100 xsm:opacity-0 mx-auto max-w-[20em] min-w-[1em] fixed ease-out duration-300 transition-all bg-[#16161E]/90 ring-1 ring-white/[0.2] backdrop-blur-xl drop-shadow-lg  h-[19em] rounded-lg ">
+          <section className="z-10  bottom-5 right-5 left-5 lg:opacity-100 md:opacity-100 xsm:opacity-0 mx-auto max-w-[20em] min-w-[1em] fixed ease-out duration-300 transition-all bg-[#16161E]/80 ring-1 ring-white/[0.2] backdrop-blur-xl drop-shadow-lg  h-[19em] rounded-lg ">
             <div className="flex gap-4 bg-blue-200 w-auto  h-[12em] mt-4 mx-auto ">
               <Link to="/orb">
                 <div className="bg-red-600  w-5 h-1" />
@@ -61,10 +61,10 @@ function AudioController({ setMusicData, selectedSong }) {
                 className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
               ></div>
               <span className="text-red-200 text-sm">3:15</span>
-              <div>
+              <div id="open-tracklist" title="open-tracklist" className="text-red-200 row-start-2">
                 <p>open</p>
               </div>
-              {/* 
+              {/*
               <AddTracks setTracksList={setTracksList} /> */}
               <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
               <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />

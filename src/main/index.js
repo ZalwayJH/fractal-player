@@ -5,12 +5,14 @@ import icon from '../../resources/icon.png?asset';
 const fs = require('fs');
 const mm = require('music-metadata');
 import { inspect } from 'util';
+import { lastIndexOf } from 'lodash';
 async function createWindow() {
   // Create the browser window.
 
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    minWidth: 935,
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: process.platform === 'win32' ? 'hidden' : 'visible',
@@ -118,17 +120,26 @@ async function handleMetaData(channel, filePathArray) {
       const duration = (
         Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100
       ).toString();
+      console.log(inspect(metadata, { showHidden: true, depth: 5 }));
+      const pathFormatted = filePath.replace(/\\/g, '/');
+      const fallbackTitle = pathFormatted.slice(
+        pathFormatted.lastIndexOf('/') + 1,
+        pathFormatted.lastIndexOf('.')
+      );
+      const coverImage = cover ? cover.data.toString('base64') : null;
+
+      //console.log(inspect(coverImage, { showHidden: true, depth: 5 }));
       return {
-        path: filePath.replace(/\\/g, '/'),
+        path: pathFormatted,
         album: metadata.common.album || 'N/a',
         artist: metadata.common.artist || 'N/a',
-        title: metadata.common.title || 'N/a',
+        title: metadata.common.title || fallbackTitle,
         duration: duration.length < 3 ? duration + '0' : duration,
         artists: metadata.common.artists || 'N/a',
         format: metadata.format || 'N/a',
-        trackNumber: metadata.common.track.no || 'N/a'
-        // cover: cover
-        // Add other metadata fields as needed
+        trackNumber: metadata.common.track.no || 'N/a',
+        cover: coverImage
+        // // Add other metadata fields as needed
       };
     });
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Howl, Howler } from 'howler';
+
 export function useGetAudioFTDD(song) {
   const [songData, setSongData] = useState([]);
   const animationFrameIdRef = useRef(null);
@@ -21,6 +22,7 @@ export function useGetAudioFTDD(song) {
         // Buffer to hold the audio data
         const dataArray = new Float32Array(bufferLength);
         const smoothedDataArray = new Float32Array(bufferLength);
+        const freqArr = new Float32Array(3);
 
         function getAudioData() {
           // analyser.getByteFrequencyData(dataArray);
@@ -30,14 +32,18 @@ export function useGetAudioFTDD(song) {
             if (dataArray[i] < 0) {
               dataArray[i] = dataArray[i] * -1;
             }
-            if (i === 0) {
-              smoothedDataArray[i] = dataArray[i];
-            } else {
-              smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
-            }
           }
+          //   // if (i === 0) {
+          //   //   smoothedDataArray[i] = dataArray[i];
+          //   // } else {
+          //   //   smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
+          //   // }
 
-          setSongData(smoothedDataArray);
+          freqArr[0] = Math.round((dataArray[0] + Number.EPSILON) * 100) / 10;
+          freqArr[1] = Math.round((dataArray[dataArray.length / 2] + Number.EPSILON) * 100) / 10;
+          freqArr[2] = Math.round((dataArray[dataArray.length - 1] + Number.EPSILON) * 100) / 10;
+          setSongData(freqArr);
+          // setSongData(smoothedDataArray);
           // setMusicData(dataArray);
           //    Call this function again to keep updating the dataArray
           animationFrameIdRef.current = requestAnimationFrame(getAudioData);
