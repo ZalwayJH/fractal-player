@@ -7,7 +7,7 @@ function Player() {
   const [musicData, setMusicData] = useState([]);
 
   return (
-    <div className="h-full">
+    <div className="h-full min-h-[600px] ">
       <Audio setMusicData={setMusicData} />
       <Visualizer musicData={musicData} />
     </div>

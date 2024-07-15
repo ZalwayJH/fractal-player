@@ -1,6 +1,6 @@
 uniform float iTime;
 uniform vec2 iResolution;
-uniform vec3 iFrequency;
+uniform float iFrequency[512];
 varying vec2 vUv;
 varying float x;
 
@@ -21,13 +21,13 @@ varying float x;
                       vec2 uv0 = uv;
                       vec3 finalColor = vec3(0.0);
 
-                     float num = iFrequency.x / iFrequency.y;
-                    float funk = iFrequency.x * 2. <= 8. ? 8. : iFrequency.x;
+                     //float num = iFrequency.x / iFrequency.y;
+                    //float funk = iFrequency.x * 2. <= 8. ? 8. : iFrequency.x;
                       for (float i = 0.0; i < 4.0; i++) {
                           uv = fract(uv * 1.5) - 0.5;
                           float d = length(uv) * exp(-length(uv0));
                           vec3 col = palette(length(uv0) + i*.4 + iTime*.4);
-                          d = sin(d*8.0 + iTime )/funk;
+                          d = sin(d*8.0 + iTime )/ iFrequency[0] / 2.;
                           d = abs(d);
                           d = pow(0.01 / d,  1.2);
                           finalColor += col * d;

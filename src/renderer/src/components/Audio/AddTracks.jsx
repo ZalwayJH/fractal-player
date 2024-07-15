@@ -25,7 +25,7 @@ function AddTracks({ setTracksList }) {
         onClick={() => {
           handleAddingSongs();
         }}
-        className="text-[#eec48a] fixed text-2xl cursor-pointer top-[3.2rem]"
+        className="text-[#eec48a] text-2xl cursor-pointer"
       />
     </>
   );

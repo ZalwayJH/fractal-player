@@ -8,9 +8,10 @@ export function useGetAudioFTDD(song) {
   //const refinedPaths = filePaths.map((path) => {
   //return path.slice(59, path.length);
   //});
+  console.log(song);
   const music = useRef(
     new Howl({
-      src: [...song],
+      src: song,
       html5: false,
       volume: 1.0,
       onplay: function () {
@@ -21,47 +22,40 @@ export function useGetAudioFTDD(song) {
         const bufferLength = analyser.frequencyBinCount;
         // Buffer to hold the audio data
         const dataArray = new Float32Array(bufferLength);
-        const smoothedDataArray = new Float32Array(bufferLength);
-        const freqArr = new Float32Array(3);
 
         function getAudioData() {
-          // analyser.getByteFrequencyData(dataArray);
           analyser.getFloatTimeDomainData(dataArray);
-          //Lowpass filter on dataArray to smooth out signal
+          //loop through data, converting every negative number to positive and round up 2 decimal places
           for (let i = 0; i < bufferLength; i++) {
             if (dataArray[i] < 0) {
               dataArray[i] = dataArray[i] * -1;
+              dataArray[i] = Math.round((dataArray[i] + Number.EPSILON) * 100) / 10;
             }
           }
-          //   // if (i === 0) {
-          //   //   smoothedDataArray[i] = dataArray[i];
-          //   // } else {
-          //   //   smoothedDataArray[i] = 0.8 * smoothedDataArray[i - 1] + 0.2 * dataArray[i];
-          //   // }
-
-          freqArr[0] = Math.round((dataArray[0] + Number.EPSILON) * 100) / 10;
-          freqArr[1] = Math.round((dataArray[dataArray.length / 2] + Number.EPSILON) * 100) / 10;
-          freqArr[2] = Math.round((dataArray[dataArray.length - 1] + Number.EPSILON) * 100) / 10;
-          setSongData(freqArr);
-          // setSongData(smoothedDataArray);
-          // setMusicData(dataArray);
-          //    Call this function again to keep updating the dataArray
+          setSongData(dataArray);
           animationFrameIdRef.current = requestAnimationFrame(getAudioData);
         }
-
         // Start retrieving audio data
         getAudioData();
       },
       onpause: function () {
+        // populate dataArray with 0's when paused for glsl shader convenience
         cancelAnimationFrame(animationFrameIdRef.current);
+        resetDataArray();
       },
       onstop: function () {
         cancelAnimationFrame(animationFrameIdRef.current);
+        resetDataArray();
       },
       onselect: function () {
         //set current song _src ?
       }
     })
   );
+
+  function resetDataArray() {
+    const resetArray = new Float32Array(512);
+    setSongData(resetArray);
+  }
   return { songData: songData, music: music };
 }

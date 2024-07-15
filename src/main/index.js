@@ -5,7 +5,6 @@ import icon from '../../resources/icon.png?asset';
 const fs = require('fs');
 const mm = require('music-metadata');
 import { inspect } from 'util';
-import { lastIndexOf } from 'lodash';
 async function createWindow() {
   // Create the browser window.
 
@@ -13,6 +12,7 @@ async function createWindow() {
     width: 1200,
     height: 800,
     minWidth: 935,
+    minHeight: 600,
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: process.platform === 'win32' ? 'hidden' : 'visible',
@@ -86,6 +86,7 @@ ipcMain.on('close-window', () => {
   BrowserWindow.getFocusedWindow().close();
 });
 
+//defines settings for file explorer, like what types of files to show.
 async function handleFileOpen() {
   return await dialog
     .showOpenDialog(BrowserWindow.mainWindow, {
@@ -101,7 +102,6 @@ async function handleFileOpen() {
         console.log('file dialogue was cancelled');
         return [];
       } else {
-        // console.log('file paths wre selected:', result.filePaths);
         return result.filePaths;
       }
     })
@@ -110,7 +110,9 @@ async function handleFileOpen() {
     });
 }
 
-async function handleMetaData(channel, filePathArray) {
+//get filepaths when user adds files then parse metadata and write an object with the desired info
+//to the json file tracklist.json.
+async function handleMetaData(filePathArray) {
   const path = 'src/renderer/src/songList/trackList.json';
   const file = await handleReadFile();
   try {
@@ -120,7 +122,6 @@ async function handleMetaData(channel, filePathArray) {
       const duration = (
         Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100
       ).toString();
-      console.log(inspect(metadata, { showHidden: true, depth: 5 }));
       const pathFormatted = filePath.replace(/\\/g, '/');
       const fallbackTitle = pathFormatted.slice(
         pathFormatted.lastIndexOf('/') + 1,
@@ -134,7 +135,7 @@ async function handleMetaData(channel, filePathArray) {
         album: metadata.common.album || 'N/a',
         artist: metadata.common.artist || 'N/a',
         title: metadata.common.title || fallbackTitle,
-        duration: duration.length < 3 ? duration + '0' : duration,
+        duration: duration.length === 3 ? duration + '0' : duration,
         artists: metadata.common.artists || 'N/a',
         format: metadata.format || 'N/a',
         trackNumber: metadata.common.track.no || 'N/a',
@@ -153,6 +154,7 @@ async function handleMetaData(channel, filePathArray) {
   }
 }
 
+//check if added songs are alrady in the json file and only add new ones
 async function addNewTracksToFile(file, path, data) {
   const currentSongs = await file;
   const newSongs = await data;
@@ -190,6 +192,7 @@ async function addNewTracksToFile(file, path, data) {
   }
 }
 
+//first write to file of added tracks
 async function writeTracksToFile(path, data) {
   try {
     fs.writeFile(
@@ -212,9 +215,9 @@ async function writeTracksToFile(path, data) {
   }
 }
 
+//read data from json file and send it to renderer.
 async function handleReadFile() {
   try {
-    // Use fs.promises.readFile for a proper async/await pattern
     const filePath = 'src/renderer/src/songList/trackList.json';
     const data = await fs.promises.readFile(filePath, 'utf8');
 
@@ -225,6 +228,7 @@ async function handleReadFile() {
   }
 }
 
+//call handleReadFile when file explorer is openned
 ipcMain.handle('read:file', async () => {
   return await handleReadFile().then((result) => {
     return result;

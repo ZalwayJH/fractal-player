@@ -1,4 +1,3 @@
-// import { DataTable } from 'primereact/datatable';
 import { useState } from 'react';
 import {
   Card,
@@ -11,19 +10,19 @@ import {
 } from '@material-tailwind/react';
 import { useGetTrackList } from '../../hooks/useGetTrackList';
 import AddTracks from './AddTracks';
+import { GoHeartFill } from 'react-icons/go';
 import defaultCover from '../../assets/fractalDefault.png';
+
 function TracksMenu({ setSelectedSong }) {
   const [filterText, setFilterText] = useState('');
-  const { tracks, setTracks, status, error } = useGetTrackList();
-
+  const { tracks, setTracks, status } = useGetTrackList();
   let tracksList = [];
-  if (error) {
-    throw new Error(error.message);
-  }
 
   if (status === 'success') {
     tracksList = tracks;
   }
+
+  //filter tracks based on title, album or artist
   const filteredItems = tracksList.filter(
     (item) =>
       (item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -33,32 +32,26 @@ function TracksMenu({ setSelectedSong }) {
   const onFilter = (e) => {
     setFilterText(e.target.value);
   };
-  const tableHeaders = ['', 'Title', 'Artist', 'Album', 'Duration'];
 
   return (
-    <Card className="h-full select-none rounded-none  w-full max-w-[25%] bg-[#1a1b26]/[1] backdrop-blur-xl fixed z-20 overflow-scroll">
-      <AddTracks setTracksList={setTracks} />
-      <CardHeader floated={false} shadow={false} className=" h-[45px] mb-4 bg-transparent">
-        <div className="flex flex-col my-5   items-center ">
-          <div className="fixed ml-[0.40rem]  top-7">
-            <Input
-              className=" w-full"
-              label="Search"
-              type="text"
-              color="white"
-              aria-label="Search Input"
-              value={filterText}
-              onChange={onFilter}
-            />
-          </div>
-        </div>
-      </CardHeader>
-      <table className="w-full mt-3 table-auto text-left">
+    <section className="h-full select-none rounded-none max-w-[500px] lg:w-4/12   md:w-3/12 transition-all ease-in-out duration-300 bg-[#16161E]/[0.99] z-30 fixed overflow-scroll">
+      <div className="pt-5 px-4 max-w-none w-auto    bg-transparent">
+        <Input
+          label="Search"
+          type="text"
+          color="white"
+          aria-label="Search Input"
+          value={filterText}
+          onChange={onFilter}
+        />
+        <AddTracks setTracksList={setTracks} />
+      </div>
+      <table className="w-full mt-3  text-left">
         <tbody>
           {filteredItems.map(({ path, title, artist, album, duration, cover }, index) => {
             const isLast = index === filteredItems.length - 1;
             let srcVal = cover !== null ? `data:image/png;base64, ${cover}` : defaultCover;
-            const classes = 'p-2 border-b border-blue-gray-50/[0.2]  cursor-pointer ';
+            const classes = ' border-b border-blue-gray-50/[0.2]  cursor-pointer ';
             return (
               <tr
                 key={path}
@@ -67,23 +60,24 @@ function TracksMenu({ setSelectedSong }) {
                 }}
                 className=" hover:bg-gray-800/[0.5]"
               >
-                <td className="p-2 border-b border-blue-gray-50/[0.2]  cursor-pointer ">
-                  <img src={srcVal} width="30" height="30" className=" min-h-[30px]" />
+                <td className="p-3 border-b border-blue-gray-50/[0.2]  cursor-pointer  ">
+                  <div className="w-[40px] h-[40px] min-h-[40px] min-w-[40px] ">
+                    <img src={srcVal} width="40" height="40" className="  object-cover " />
+                  </div>
                 </td>
                 <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-semibold text-gray-300 truncate w-[100px] text-xs "
+                    className=" text-gray-300 truncate w-[180px] text-md "
                   >
                     {title}
                   </Typography>
-                </td>
-                <td className={classes}>
+
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal  w-[100px] text-xs text-gray-300  "
+                    className="font-normal   w-[180px] text-sm text-gray-500  "
                   >
                     {artist}
                   </Typography>
@@ -92,7 +86,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[100px] text-xs text-gray-300"
+                    className="font-normal w-[70px] truncate  text-sm text-gray-500"
                   >
                     {album}
                   </Typography>
@@ -101,9 +95,19 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[100px] text-xs pl-4 text-gray-300"
+                    className="font-normal w-9   pl-3  text-sm  text-gray-500 "
                   >
                     {duration}
+                  </Typography>
+                </td>
+
+                <td className={classes}>
+                  <Typography
+                    varient="small"
+                    color="blue-gray"
+                    className="font-normal w-9 pl-2 ml-2 text-lg truncate text-gray-500 "
+                  >
+                    <GoHeartFill />
                   </Typography>
                 </td>
               </tr>
@@ -111,7 +115,7 @@ function TracksMenu({ setSelectedSong }) {
           })}
         </tbody>
       </table>
-    </Card>
+    </section>
   );
 }
 

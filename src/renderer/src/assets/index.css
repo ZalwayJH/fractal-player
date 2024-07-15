@@ -49,6 +49,7 @@ body {
 
 canvas {
   height: 100dvh;
+  background-color: black;
 }
 
 audio::-webkit-media-controls-panel {
