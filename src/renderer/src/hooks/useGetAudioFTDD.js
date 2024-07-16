@@ -1,17 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { Howl, Howler } from 'howler';
 
-export function useGetAudioFTDD(song) {
+export function useGetAudioFTDD(selectedSong) {
   const [songData, setSongData] = useState([]);
   const animationFrameIdRef = useRef(null);
 
-  //const refinedPaths = filePaths.map((path) => {
-  //return path.slice(59, path.length);
+  //const refinedPaths = selectedSong.map((path) => {
+  //  return path.slice(59, path.length);
   //});
-  console.log(song);
+  //console.log(refinedPaths, 'refinedPaths');
+  //console.log(song);
+  console.log(selectedSong);
   const music = useRef(
     new Howl({
-      src: song,
+      src: selectedSong,
       html5: false,
       volume: 1.0,
       onplay: function () {

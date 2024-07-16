@@ -24,20 +24,21 @@ function AudioController({ setMusicData, selectedSong }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   //store the selected song in state and pass it to useGetAudioFTDD
-  const [songList, setSongList] = useState([teachers, audioMoe]);
-  const { songData, music } = useGetAudioFTDD(songList, selectedSong);
+  const { songData, musicRef } = useGetAudioFTDD(selectedSong);
 
   //update musicData whenever the data from useGetAudioFTDD changes
   useEffect(() => {
-    setMusicData(songData);
+    if (songData.length > 0) {
+      setMusicData(songData);
+    }
   }, [songData]);
 
   const playPause = () => {
     if (isPlaying) {
-      music.current.pause();
+      musicRef.current.pause();
       setIsPlaying(false);
     } else {
-      music.current.play();
+      musicRef.current.play();
       setIsPlaying(true);
     }
   };

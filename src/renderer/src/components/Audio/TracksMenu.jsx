@@ -34,8 +34,8 @@ function TracksMenu({ setSelectedSong }) {
   };
 
   return (
-    <section className="h-full select-none rounded-none max-w-[500px] lg:w-4/12   md:w-3/12 transition-all ease-in-out duration-300 bg-[#16161E]/[0.99] z-30 fixed overflow-scroll">
-      <div className="pt-5 px-4 max-w-none w-auto    bg-transparent">
+    <section className="h-full select-none rounded-none max-w-[500px] lg:w-4/12 mt-24 md:w-3/12 transition-all ease-in-out duration-300 bg-[#16161E]/[0.99] z-30 fixed overflow-scroll">
+      <div className=" p-4 max-w-[500px] transition-all border-r border-white/[0.2]   ease-in-out duration-300 top-0 fixed md:w-3/12 lg:w-4/12 bg-black/[0.9]">
         <Input
           label="Search"
           type="text"
@@ -46,22 +46,26 @@ function TracksMenu({ setSelectedSong }) {
         />
         <AddTracks setTracksList={setTracks} />
       </div>
-      <table className="w-full mt-3  text-left">
+      <table className="w-full    text-left">
         <tbody>
           {filteredItems.map(({ path, title, artist, album, duration, cover }, index) => {
             const isLast = index === filteredItems.length - 1;
             let srcVal = cover !== null ? `data:image/png;base64, ${cover}` : defaultCover;
-            const classes = ' border-b border-blue-gray-50/[0.2]  cursor-pointer ';
+            const classes = '  border-b border-blue-gray-50/[0.2]  cursor-pointer ';
             return (
               <tr
                 key={path}
                 onClick={() => {
-                  setSelectedSong(path);
+                  setSelectedSong(
+                    [path].map((pathy) => {
+                      return pathy.slice(59, path.length);
+                    })
+                  );
                 }}
                 className=" hover:bg-gray-800/[0.5]"
               >
                 <td className="p-3 border-b border-blue-gray-50/[0.2]  cursor-pointer  ">
-                  <div className="w-[40px] h-[40px] min-h-[40px] min-w-[40px] ">
+                  <div className="w-[40px] h-[40px] min-h-[40px] min-w-[40px] bg-black/[0.5] m-1">
                     <img src={srcVal} width="40" height="40" className="  object-cover " />
                   </div>
                 </td>
@@ -86,7 +90,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-[70px] truncate  text-sm text-gray-500"
+                    className="font-normal w-16   text-sm text-gray-500"
                   >
                     {album}
                   </Typography>
@@ -105,7 +109,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     varient="small"
                     color="blue-gray"
-                    className="font-normal w-9 pl-2 ml-2 text-lg truncate text-gray-500 "
+                    className="font-normal w-9 pl-2 ml-2 text-lg text-gray-500 "
                   >
                     <GoHeartFill />
                   </Typography>

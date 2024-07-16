@@ -19,6 +19,7 @@ export default function Orb({ musicData }) {
   );
 
   useFrame(({ clock }) => {
+    //console.log(musicData);
     mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
     mesh.current.material.uniforms.iResolution.value = [viewport.width, viewport.height];
     mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
