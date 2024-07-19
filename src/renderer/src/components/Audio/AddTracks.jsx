@@ -8,8 +8,8 @@ function AddTracks({ setTracksList }) {
       const filePaths = await openFileFromDirectory();
       if (filePaths.length === 0) return [];
       await writeFileMetaData(filePaths);
-      const songData = await readFile();
-      setTracksList(songData);
+      const tracks = await readFile();
+      setTracksList(tracks);
     } catch (error) {
       console.error('Error in React component while adding songs:', error.message);
       throw new Error(error.message);

@@ -6,7 +6,6 @@ export function useGetTrackList() {
   const [tracks, setTracks] = useState([]);
   const getTrackList = useCallback(async () => {
     const list = await readFile();
-
     return list;
   }, [tracks]);
   const { data, status, error } = useQuery({
@@ -19,9 +18,6 @@ export function useGetTrackList() {
       setTracks(data);
     }
   }, [status]);
-  if (error) {
-    throw new Error(error.message);
-  }
 
-  return { tracks: tracks, setTracks: setTracks, status: status };
+  return { tracks: tracks, setTracks: setTracks, error: error, status: status };
 }

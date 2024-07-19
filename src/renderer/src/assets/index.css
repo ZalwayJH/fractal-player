@@ -105,13 +105,10 @@ audio::-webkit-media-controls-volume-slider {
 /* width */
 /* width */
 ::-webkit-scrollbar {
-  padding: 10px;
-  margin: 20px;
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 100px;
   background-color: none;
-
-  cursor: all-scroll;
+  cursor: pointer;
 }
 
 /* Track */
@@ -120,8 +117,8 @@ audio::-webkit-media-controls-volume-slider {
 ::-webkit-scrollbar-thumb {
   background: rgb(148, 148, 148);
   border-radius: 10px;
-  cursor: pointer;
   user-select: none;
+  margin: 30px;
 }
 ::-webkit-scrollbar-corner {
   display: none;

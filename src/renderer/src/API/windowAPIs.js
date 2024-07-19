@@ -13,14 +13,13 @@ async function openFileFromDirectory() {
     return result;
   } catch (error) {
     console.error('error in api file while opening file', error);
-    //if error we return an empty array incase of error
+    //if error we return an empty array incase of console.error;
     return [];
   }
 }
-async function writeFileMetaData(filePath, file) {
+async function writeFileMetaData(filePath) {
   try {
-    const result = await app.api.invoke('write:metadata', filePath, file);
-    // console.log(result);
+    const result = await app.api.invoke('write:metadata', filePath);
     return result;
   } catch (error) {
     console.error(error);

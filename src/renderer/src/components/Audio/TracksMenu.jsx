@@ -34,8 +34,8 @@ function TracksMenu({ setSelectedSong }) {
   };
 
   return (
-    <section className="h-full select-none rounded-none max-w-[500px] lg:w-4/12 mt-24 md:w-3/12 transition-all ease-in-out duration-300 bg-[#16161E]/[0.99] z-30 fixed overflow-scroll">
-      <div className=" p-4 max-w-[500px] transition-all border-r border-white/[0.2]   ease-in-out duration-300 top-0 fixed md:w-3/12 lg:w-4/12 bg-black/[0.9]">
+    <section className="h-full  border-r border-white/[0.2]   select-none rounded-none xl:w-5/12 max-w-[36rem] lg:w-4/12  mt-24 md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99] z-30 fixed overflow-scroll">
+      <div className=" p-4 max-w-[36rem] xl:w-5/12 transition-all border-r border-white/[0.2]   ease-in-out duration-100 top-0 fixed md:w-3/12 lg:w-4/12 bg-black/[0.9]">
         <Input
           label="Search"
           type="text"
@@ -49,9 +49,9 @@ function TracksMenu({ setSelectedSong }) {
       <table className="w-full    text-left">
         <tbody>
           {filteredItems.map(({ path, title, artist, album, duration, cover }, index) => {
-            const isLast = index === filteredItems.length - 1;
+            //const isLast = index === filteredItems.length - 1;
             let srcVal = cover !== null ? `data:image/png;base64, ${cover}` : defaultCover;
-            const classes = '  border-b border-blue-gray-50/[0.2]  cursor-pointer ';
+            const classes = 'p-1  border-b border-blue-gray-50/[0.2]  cursor-pointer ';
             return (
               <tr
                 key={path}
@@ -64,7 +64,7 @@ function TracksMenu({ setSelectedSong }) {
                 }}
                 className=" hover:bg-gray-800/[0.5]"
               >
-                <td className="p-3 border-b border-blue-gray-50/[0.2]  cursor-pointer  ">
+                <td className=" border-b border-blue-gray-50/[0.2]  cursor-pointer ">
                   <div className="w-[40px] h-[40px] min-h-[40px] min-w-[40px] bg-black/[0.5] m-1">
                     <img src={srcVal} width="40" height="40" className="  object-cover " />
                   </div>
@@ -73,7 +73,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className=" text-gray-300 truncate w-[180px] text-md "
+                    className=" text-gray-300 truncate w-[14em] text-md "
                   >
                     {title}
                   </Typography>
@@ -81,7 +81,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal   w-[180px] text-sm text-gray-500  "
+                    className=" truncate  w-[14em] text-sm text-gray-500  "
                   >
                     {artist}
                   </Typography>
@@ -90,7 +90,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-16   text-sm text-gray-500"
+                    className=" w-[12em] truncate  text-sm text-gray-500"
                   >
                     {album}
                   </Typography>
@@ -99,7 +99,7 @@ function TracksMenu({ setSelectedSong }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal w-9   pl-3  text-sm  text-gray-500 "
+                    className="font-normal w-[3em]   pl-3  text-sm  text-gray-500 "
                   >
                     {duration}
                   </Typography>

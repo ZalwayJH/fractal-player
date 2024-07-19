@@ -24,7 +24,7 @@ function AudioController({ setMusicData, selectedSong }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   //store the selected song in state and pass it to useGetAudioFTDD
-  const { songData, musicRef } = useGetAudioFTDD(selectedSong);
+  const { songData, musicRef } = useGetAudioFTDD(selectedSong, setIsPlaying);
 
   //update musicData whenever the data from useGetAudioFTDD changes
   useEffect(() => {
@@ -32,7 +32,6 @@ function AudioController({ setMusicData, selectedSong }) {
       setMusicData(songData);
     }
   }, [songData]);
-
   const playPause = () => {
     if (isPlaying) {
       musicRef.current.pause();
@@ -42,6 +41,9 @@ function AudioController({ setMusicData, selectedSong }) {
       setIsPlaying(true);
     }
   };
+
+  console.log(musicRef.current);
+
   return (
     <div>
       <div className="group ease-in-out duration-300">

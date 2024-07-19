@@ -9,7 +9,7 @@ async function createWindow() {
   // Create the browser window.
 
   const mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1300,
     height: 800,
     minWidth: 935,
     minHeight: 600,
@@ -50,7 +50,9 @@ app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
   ipcMain.handle('dialog:openFile', handleFileOpen);
-  ipcMain.handle('write:metadata', handleMetaData);
+  ipcMain.handle('write:metadata', async (_command, filePathArray) =>
+    handleMetaData(filePathArray)
+  );
   // ipcMain.handle('read-file', handleReadFile);
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
