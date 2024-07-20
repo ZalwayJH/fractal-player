@@ -12,7 +12,7 @@ import { useGetTrackList } from '../../hooks/useGetTrackList';
 import AddTracks from './AddTracks';
 import { GoHeartFill } from 'react-icons/go';
 import defaultCover from '../../assets/fractalDefault.png';
-
+import PlayerControls from './PlayerControls';
 function TracksMenu({ setSelectedSong }) {
   const [filterText, setFilterText] = useState('');
   const { tracks, setTracks, status } = useGetTrackList();
@@ -34,8 +34,8 @@ function TracksMenu({ setSelectedSong }) {
   };
 
   return (
-    <section className="h-full  border-r border-white/[0.2]   select-none rounded-none xl:w-5/12 max-w-[36rem] lg:w-4/12  mt-24 md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99] z-30 fixed overflow-scroll">
-      <div className=" p-4 max-w-[36rem] xl:w-5/12 transition-all border-r border-white/[0.2]   ease-in-out duration-100 top-0 fixed md:w-3/12 lg:w-4/12 bg-black/[0.9]">
+    <div className="h-full  border-r grid grid-rows-[6em_minmax(100px,_18fr)_8em]  border-white/[0.2]   select-none rounded-none xl:w-5/12 max-w-[36rem] lg:w-4/12  md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99] z-30 fixed">
+      <div className="w-full h-full  p-4 mb-2 transition-all border-b border-white/[0.2]  z-40  ease-in-out duration-100 bg-black/[0.9]">
         <Input
           label="Search"
           type="text"
@@ -46,80 +46,82 @@ function TracksMenu({ setSelectedSong }) {
         />
         <AddTracks setTracksList={setTracks} />
       </div>
-      <table className="w-full    text-left">
-        <tbody>
-          {filteredItems.map(({ path, title, artist, album, duration, cover }, index) => {
-            //const isLast = index === filteredItems.length - 1;
-            let srcVal = cover !== null ? `data:image/png;base64, ${cover}` : defaultCover;
-            const classes = 'p-1  border-b border-blue-gray-50/[0.2]  cursor-pointer ';
-            return (
-              <tr
-                key={path}
-                onClick={() => {
-                  setSelectedSong(
-                    [path].map((pathy) => {
-                      return pathy.slice(59, path.length);
-                    })
-                  );
-                }}
-                className=" hover:bg-gray-800/[0.5]"
-              >
-                <td className=" border-b border-blue-gray-50/[0.2]  cursor-pointer ">
-                  <div className="w-[40px] h-[40px] min-h-[40px] min-w-[40px] bg-black/[0.5] m-1">
-                    <img src={srcVal} width="40" height="40" className="  object-cover " />
-                  </div>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className=" text-gray-300 truncate w-[14em] text-md "
-                  >
-                    {title}
-                  </Typography>
+      <section className="h-full w-full  z-30 overflow-scroll overflow-x-auto">
+        <table className="w-full    text-left">
+          <tbody>
+            {filteredItems.map(({ path, title, artist, album, duration, cover }, index) => {
+              //const isLast = index === filteredItems.length - 1;
+              let srcVal = cover !== null ? `data:image/png;base64, ${cover}` : defaultCover;
+              const classes = 'p-1  border-b border-blue-gray-50/[0.2]  cursor-pointer ';
+              return (
+                <tr
+                  key={path}
+                  onClick={() => {
+                    setSelectedSong(
+                      [path].map((pathy) => {
+                        return pathy.slice(59, path.length);
+                      })
+                    );
+                  }}
+                  className=" hover:bg-gray-800/[0.5]"
+                >
+                  <td className=" border-b border-blue-gray-50/[0.2]  cursor-pointer ">
+                    <div className="w-[40px] h-[40px] min-h-[40px] min-w-[40px] bg-black/[0.5] m-1">
+                      <img src={srcVal} width="40" height="40" className="  object-cover " />
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className=" text-gray-300 truncate w-[14em] text-md "
+                    >
+                      {title}
+                    </Typography>
 
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className=" truncate  w-[14em] text-sm text-gray-500  "
-                  >
-                    {artist}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className=" w-[12em] truncate  text-sm text-gray-500"
-                  >
-                    {album}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal w-[3em]   pl-3  text-sm  text-gray-500 "
-                  >
-                    {duration}
-                  </Typography>
-                </td>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className=" truncate  w-[14em] text-sm text-gray-500  "
+                    >
+                      {artist}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className=" w-[12em] truncate  text-sm text-gray-500"
+                    >
+                      {album}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal w-[3em]   pl-3  text-sm  text-gray-500 "
+                    >
+                      {duration}
+                    </Typography>
+                  </td>
 
-                <td className={classes}>
-                  <Typography
-                    varient="small"
-                    color="blue-gray"
-                    className="font-normal w-9 pl-2 ml-2 text-lg text-gray-500 "
-                  >
-                    <GoHeartFill />
-                  </Typography>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </section>
+                  <td className={classes}>
+                    <Typography
+                      varient="small"
+                      color="blue-gray"
+                      className="font-normal w-9 pl-2 ml-2 text-lg text-gray-500 "
+                    >
+                      <GoHeartFill />
+                    </Typography>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
+    </div>
   );
 }
 

@@ -11,6 +11,7 @@ export function useGetAudioFTDD(selectedSong, setIsPlaying) {
   //});
   //console.log(refinedPaths, 'refinedPaths');
   //console.log(song);
+  console.log(selectedSong);
   useEffect(() => {
     musicRef.current = new Howl({
       src: selectedSong,
@@ -35,14 +36,12 @@ export function useGetAudioFTDD(selectedSong, setIsPlaying) {
             }
           }
           setSongData(dataArray);
-          animationFrameIdRef.current = requestAnimationFrame(getAudioData);
         }
         // Start retrieving audio data
         getAudioData();
       },
       onpause: function () {
         console.log('paused');
-        setIsPlaying(false);
         // populate dataArray with 0's when paused for glsl shader convenience
         cancelAnimationFrame(animationFrameIdRef.current);
         resetDataArray();
@@ -58,11 +57,6 @@ export function useGetAudioFTDD(selectedSong, setIsPlaying) {
       },
       onend: function () {
         console.log('ended');
-        setIsPlaying(false);
-      },
-      onplay: function () {
-        console.log('playing');
-        setIsPlaying(true);
       }
     });
   }, [selectedSong]);
@@ -109,7 +103,7 @@ export function useGetAudioFTDD(selectedSong, setIsPlaying) {
   //    }
   //  })
   //);
-
+  console.log(songData);
   function resetDataArray() {
     const resetArray = new Float32Array(512);
     setSongData(resetArray);

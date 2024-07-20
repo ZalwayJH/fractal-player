@@ -56,36 +56,6 @@ function AudioController({ setMusicData, selectedSong }) {
               <div className="bg-blue-500  w-5 h-1" />
             </Link>
           </div>
-
-          <div className="w-full absolute h-[7em] items-center pb-5 justify-items-center  grid grid-cols-7 ">
-            <span className="text-[#38c3a7] text-sm">0:54</span>
-            <div
-              id="temp-timeline"
-              className="col-span-5 col-start-2 bg-[#c53b53] w-full rounded-xl h-2 "
-            ></div>
-            <span className="text-red-200 text-sm">3:15</span>
-            <div id="open-tracklist" title="open-tracklist" className="text-red-200 row-start-2">
-              <p>open</p>
-            </div>
-            {/*
-                <AddTracks setTracksList={setTracksList} /> */}
-            <TbArrowsShuffle className="text-[#bb9af7] text-xl  row-start-2 " />
-            <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl  row-start-2 " />
-            {isPlaying ? (
-              <TbPlayerPauseFilled
-                onClick={playPause}
-                className="row-start-2 text-[#7aa2f7] text-5xl "
-              />
-            ) : (
-              <TbPlayerPlayFilled
-                onClick={playPause}
-                className="row-start-2 text-[#7aa2f7] text-5xl "
-              />
-            )}
-            <TbPlayerSkipForwardFilled className="text-[#4fd6be] text-2xl cursor-pointer  row-start-2 " />
-            <TbRepeat className="text-[#c069cb] text-xl  row-start-2 " />
-            <TbVolume className="text-[#c53b4b] text-xl  row-start-2 " />
-          </div>
         </section>
       </div>
     </div>

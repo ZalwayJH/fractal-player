@@ -20,14 +20,14 @@ function AddTracks({ setTracksList }) {
   }
 
   return (
-    <>
+    <div>
       <TbFileMusic
         onClick={() => {
           handleAddingSongs();
         }}
-        className="text-[#eec48a] text-2xl cursor-pointer"
+        className="text-[#eec48a]  text-2xl cursor-pointer"
       />
-    </>
+    </div>
   );
 }
 
