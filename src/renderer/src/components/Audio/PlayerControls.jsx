@@ -18,7 +18,7 @@ const PlayerControls = ({ setMusicData }) => {
 
   const [selectedSong, setSelectedSong] = useState([audiomoe]);
   //store the selected song in state and pass it to useGetAudioFTDD
-  const { songData, musicRef } = useGetAudioFTDD(selectedSong, setIsPlaying);
+  const { songData, musicRef } = useGetAudioFTDD(selectedSong);
 
   //update musicData whenever the data from useGetAudioFTDD changes
   useEffect(() => {
@@ -36,8 +36,6 @@ const PlayerControls = ({ setMusicData }) => {
     }
   };
 
-  console.log(musicRef.current);
-  console.log(songData);
   return (
     <div>
       <TracksMenu setSelectedSong={setSelectedSong} />
