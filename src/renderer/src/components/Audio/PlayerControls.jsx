@@ -15,8 +15,8 @@ import {
 import audiomoe from '../../songs/audoMoe.mp3';
 const PlayerControls = ({ setMusicData }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const [selectedSong, setSelectedSong] = useState([audiomoe]);
+  const [songs, setSongs] = useState([]);
+  const [selectedSong, setSelectedSong] = useState({ songs: [], selection: [audiomoe] });
   //store the selected song in state and pass it to useGetAudioFTDD
   const { songData, musicRef } = useGetAudioFTDD(selectedSong);
 
@@ -38,7 +38,7 @@ const PlayerControls = ({ setMusicData }) => {
 
   return (
     <div>
-      <TracksMenu setSelectedSong={setSelectedSong} />
+      <TracksMenu setSelectedSong={setSelectedSong} setSongs={setSongs} />
       <div className="bg-black border-r border-white/[0.2]   h-[8em] align-middle grid-row-1  items-center pb-5 justify-items-center  grid grid-cols-7   fixed bottom-0 xl:w-5/12 max-w-[36rem] lg:w-4/12  md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99]  z-40">
         <span className="text-[#38c3a7] text-sm">0:54</span>
         <div

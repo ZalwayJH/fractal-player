@@ -12,16 +12,21 @@ import { useGetTrackList } from '../../hooks/useGetTrackList';
 import AddTracks from './AddTracks';
 import { GoHeartFill } from 'react-icons/go';
 import defaultCover from '../../assets/fractalDefault.png';
-import PlayerControls from './PlayerControls';
 function TracksMenu({ setSelectedSong }) {
   const [filterText, setFilterText] = useState('');
   const { tracks, setTracks, status } = useGetTrackList();
   let tracksList = [];
 
+  const shortenSongPath = (path) => [path].slice(59, path.length);
+
+  const songsAndSelectedSong = {
+    songs: [],
+    selection: []
+  };
   if (status === 'success') {
     tracksList = tracks;
+    songsAndSelectedSong.songs = tracks.map((track) => track.path);
   }
-
   //filter tracks based on title, album or artist
   const filteredItems = tracksList.filter(
     (item) =>
@@ -57,11 +62,8 @@ function TracksMenu({ setSelectedSong }) {
                 <tr
                   key={path}
                   onClick={() => {
-                    setSelectedSong(
-                      [path].map((pathy) => {
-                        return pathy.slice(59, path.length);
-                      })
-                    );
+                    songsAndSelectedSong.selection = [path];
+                    setSelectedSong(songsAndSelectedSong);
                   }}
                   className=" hover:bg-gray-800/[0.5]"
                 >

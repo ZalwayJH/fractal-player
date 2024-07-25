@@ -18,15 +18,25 @@ function AddTracks({ setTracksList }) {
       //});
     }
   }
-
+  function onChange(event) {
+    if (event.target.files.length > 0) {
+      const files = event.target.files;
+      console.log(files, 'files');
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        //raw base64 of audio file
+        const data = reader.result;
+      });
+    }
+  }
   return (
     <div>
       <TbFileMusic
-        onClick={() => {
-          handleAddingSongs();
-        }}
+        onClick={handleAddingSongs}
         className="text-[#eec48a]  text-2xl cursor-pointer"
+        type="file"
       />
+      <input type="file" multiple onChange={onChange} />
     </div>
   );
 }

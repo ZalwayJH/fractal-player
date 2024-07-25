@@ -5,15 +5,17 @@ import { useGetTrackList } from './useGetTrackList';
 export function useGetAudioFTDD(selectedSong, setIsPlaying) {
   const [songData, setSongData] = useState(new Float32Array(0));
   const animationFrameIdRef = useRef(null);
+  if (selectedSong.selection.length === 0) return;
   //const refinedPaths = selectedSong.map((path) => {
   //  return path.slice(59, path.length);
   //});
   //console.log(refinedPaths, 'refinedPaths');
   //console.log(song);
+  console.log(selectedSong);
 
   const musicRef = useRef(
     new Howl({
-      src: selectedSong,
+      src: selectedSong.selection,
       html5: false,
       volume: 1.0,
       onplay: function () {
@@ -54,7 +56,6 @@ export function useGetAudioFTDD(selectedSong, setIsPlaying) {
       }
     })
   );
-  console.log(songData);
   function resetDataArray() {
     const resetArray = new Float32Array(512);
     setSongData(resetArray);
