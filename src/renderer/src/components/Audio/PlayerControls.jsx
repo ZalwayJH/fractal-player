@@ -15,12 +15,11 @@ import {
 import audiomoe from '../../songs/audoMoe.mp3';
 const PlayerControls = ({ setMusicData }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [songs, setSongs] = useState([]);
   const [selectedSong, setSelectedSong] = useState({ songs: [], selection: [audiomoe] });
   //store the selected song in state and pass it to useGetAudioFTDD
-  const { songData, musicRef } = useGetAudioFTDD(selectedSong);
-
+  const { songData, musicRef, play } = useGetAudioFTDD(selectedSong);
   //update musicData whenever the data from useGetAudioFTDD changes
+
   useEffect(() => {
     if (songData.length > 0) {
       setMusicData(songData);
@@ -28,18 +27,19 @@ const PlayerControls = ({ setMusicData }) => {
   }, [songData]);
   const playPause = () => {
     if (isPlaying) {
-      musicRef.current.pause();
+      //musicRef.current.pause();
       setIsPlaying(false);
     } else {
-      musicRef.current.play();
+      play();
+      //musicRef.current.play();
       setIsPlaying(true);
     }
   };
 
   return (
     <div>
-      <TracksMenu setSelectedSong={setSelectedSong} setSongs={setSongs} />
-      <div className="bg-black border-r border-white/[0.2]   h-[8em] align-middle grid-row-1  items-center pb-5 justify-items-center  grid grid-cols-7   fixed bottom-0 xl:w-5/12 max-w-[36rem] lg:w-4/12  md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99]  z-40">
+      <TracksMenu setSelectedSong={setSelectedSong} />
+      <div className="bg-black border border-white/[0.2] m-3 rounded-b-lg border-t  h-[8em] align-middle grid-row-1  items-center pb-5 justify-items-center  grid grid-cols-7   fixed bottom-0 xl:w-5/12 max-w-[36rem] lg:w-4/12  md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99]  z-40">
         <span className="text-[#38c3a7] text-sm">0:54</span>
         <div
           id="temp-timeline"
@@ -55,11 +55,13 @@ const PlayerControls = ({ setMusicData }) => {
         <TbPlayerSkipBackFilled className="text-[#ff9e64] text-2xl    row-start-2 " />
         {isPlaying ? (
           <TbPlayerPauseFilled
+            id="pause"
             onClick={playPause}
             className="row-start-2 text-[#7aa2f7]  cursor-pointer  text-5xl "
           />
         ) : (
           <TbPlayerPlayFilled
+            id="play"
             onClick={playPause}
             className="row-start-2 text-[#7aa2f7]   cursor-pointer text-5xl "
           />
