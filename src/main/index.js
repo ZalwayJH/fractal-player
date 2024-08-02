@@ -121,9 +121,9 @@ async function handleMetaData(filePathArray) {
     const fileMetadataPromises = filePathArray.map(async (filePath) => {
       const metadata = await mm.parseFile(filePath);
       const cover = mm.selectCover(metadata.common.picture); // pick the cover image
-      const duration = (
-        Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100
-      ).toString();
+      const duration = (Math.round((metadata.format.duration / 60 + Number.EPSILON) * 100) / 100)
+        .toString()
+        .replace('.', ':');
       const pathFormatted = filePath.replace(/\\/g, '/');
       const fallbackTitle = pathFormatted.slice(
         pathFormatted.lastIndexOf('/') + 1,

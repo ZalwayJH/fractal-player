@@ -3,21 +3,6 @@ import { openFileFromDirectory, writeFileMetaData } from '../../API/windowAPIs';
 import { readFile } from '../../API/windowAPIs';
 import { Input } from '@material-tailwind/react';
 function AddTracks({ refetch }) {
-  //async function handleAddingSongs() {
-  //  try {
-  //    const filePaths = await openFileFromDirectory();
-  //    if (filePaths.length === 0) return [];
-  //    await writeFileMetaData(filePaths);
-  //    const tracks = await readFile();
-  //    setTracksList(setTracksList) ;
-  //  } catch (error) {
-  //    console.error('Error in React component while adding songs:', error.message);
-  //    throw new Error(error.message);
-  //    //const refinedPaths = filePaths.map((path) => {
-  //    //return path.slice(59, path.length);
-  //    //});
-  //  }
-  //}
   async function onChange(event) {
     if (event.target.files.length > 0) {
       try {
@@ -43,12 +28,10 @@ function AddTracks({ refetch }) {
   }
   return (
     <div>
-      <TbFileMusic
-        className="text-[#eec48a] absolute top-12 text-3xl z-10"
-        type="file"
-        onChange={onChange}
-      />
-      <input className="opacity-1 w-8 z-50" type="file" multiple onChange={onChange} />
+      <label className="inline-block text-3xl  text-gray-300 cursor-pointer hover:text-[#eec48a]">
+        <TbFileMusic />
+        <input className="hidden" type="file" multiple onChange={onChange} />
+      </label>
     </div>
   );
 }
