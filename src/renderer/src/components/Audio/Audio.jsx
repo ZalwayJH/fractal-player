@@ -1,13 +1,8 @@
-import { useState } from 'react';
-import AudioController from './AudioController';
-import TrackMenu from './TracksMenu';
-import audiomoe from '../../songs/audoMoe.mp3';
+import PlayerControls from './PlayerControls';
 function Audio({ setMusicData }) {
-  const [selectedSong, setSelectedSong] = useState([audiomoe]);
   return (
     <div>
-      <AudioController setMusicData={setMusicData} selectedSong={selectedSong} />
-      <TrackMenu setSelectedSong={setSelectedSong} />
+      <PlayerControls setMusicData={setMusicData} />
     </div>
   );
 }

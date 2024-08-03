@@ -5,7 +5,7 @@ import Player from './components/Player';
 
 function App() {
   return (
-    <div className="bg-[#2f3241] h-full   ">
+    <div className="bg-[#2f3241] h-full  ">
       <TitleBar />
       <Player />
     </div>

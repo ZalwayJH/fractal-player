@@ -106,9 +106,8 @@ audio::-webkit-media-controls-volume-slider {
 /* width */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 100px;
   background-color: none;
-  cursor: pointer;
+  height: 8px;
 }
 
 /* Track */
@@ -118,10 +117,18 @@ audio::-webkit-media-controls-volume-slider {
   background: rgb(148, 148, 148);
   border-radius: 10px;
   user-select: none;
-  margin: 30px;
 }
 ::-webkit-scrollbar-corner {
   display: none;
+}
+
+#trackGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 2fr 0.5fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
 }
 
 /* Han

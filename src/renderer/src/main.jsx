@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './assets/index.css';
 import App from './App';
 import { QueryClientProvider, QueryClient } from 'react-query';
-import { ThemeProvider } from '@material-tailwind/react';
 const client = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(

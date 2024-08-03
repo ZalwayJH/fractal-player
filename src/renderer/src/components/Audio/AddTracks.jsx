@@ -1,33 +1,45 @@
 import { TbFileMusic } from 'react-icons/tb';
-import { openFileFromDirectory, writeFileMetaData } from '../../API/windowAPIs';
-import { readFile } from '../../API/windowAPIs';
+import { writeFileMetaData } from '../../API/windowAPIs';
+function AddTracks({ refetch }) {
+  async function onChange(event) {
+    if (event.target.files.length > 0) {
+      try {
+        const files = [...event.target.files];
+        console.log(files);
+        const filePaths = files.map((song) => song.path);
+        if (filePaths.length === 0) return;
+        await writeFileMetaData(filePaths);
+        refetch();
+      } catch (e) {
+        console.error(e);
+      }
 
-function AddTracks({ setTracksList }) {
-  async function handleAddingSongs() {
-    try {
-      const filePaths = await openFileFromDirectory();
-      if (filePaths.length === 0) return [];
-      await writeFileMetaData(filePaths);
-      const tracks = await readFile();
-      setTracksList(tracks);
-    } catch (error) {
-      console.error('Error in React component while adding songs:', error.message);
-      throw new Error(error.message);
-      //const refinedPaths = filePaths.map((path) => {
-      //return path.slice(59, path.length);
+      //const reader = new FileReader();
+      //reader.addEventListener('load', () => {
+      //  //raw base64 of audio file
+      //  const data = reader.result;
+      //  console.log(data);
       //});
+      //reader.readAsDataURL(files[0]);
     }
+    //    onClick={handleAddingSongs}
+    //  />
   }
-
   return (
-    <>
-      <TbFileMusic
-        onClick={() => {
-          handleAddingSongs();
-        }}
-        className="text-[#eec48a] text-2xl cursor-pointer"
-      />
-    </>
+    <div>
+      <label className="inline-block text-3xl  text-gray-300 cursor-pointer hover:text-[#eec48a]">
+        <TbFileMusic />
+        <input
+          className="hidden"
+          type="file"
+          multiple
+          onChange={onChange}
+          directory="true"
+          webkitfile="true"
+          file="true"
+        />
+      </label>
+    </div>
   );
 }
 
