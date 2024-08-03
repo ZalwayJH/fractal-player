@@ -10,7 +10,7 @@ async function createWindow() {
 
   const mainWindow = new BrowserWindow({
     width: 1600,
-    height: 800,
+    height: 1000,
     minWidth: 935,
     minHeight: 600,
     show: false,
@@ -20,7 +20,8 @@ async function createWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-      contextIsolation: true
+      contextIsolation: true,
+      webSecurity: false
     }
   });
 

@@ -12,36 +12,37 @@ import {
   TbFileMusic
 } from 'react-icons/tb';
 
-import audiomoe from '../../songs/audoMoe.mp3';
+import audiomoe from '../../../../../../songs/audoMoe.mp3';
 const PlayerControls = ({ setMusicData }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedSong, setSelectedSong] = useState({ songs: [], selection: [audiomoe] });
   //store the selected song in state and pass it to useGetAudioFTDD
   const { songData, musicRef, play } = useGetAudioFTDD(selectedSong);
   //update musicData whenever the data from useGetAudioFTDD changes
-
+  console.log(selectedSong.songs);
   useEffect(() => {
     if (songData.length > 0) {
       setMusicData(songData);
     }
   }, [songData]);
   const playPause = () => {
+    console.log(musicRef);
     if (isPlaying) {
-      //musicRef.current.pause();
+      musicRef.current.pause();
+
       setIsPlaying(false);
     } else {
-      play();
-      //musicRef.current.play();
       setIsPlaying(true);
+      musicRef.current.play();
     }
   };
-
   return (
     <div>
       <TracksMenu setSelectedSong={setSelectedSong} />
       <div className="bg-black border border-white/[0.2] m-3 rounded-b-lg border-t gap-y-2  h-auto align-middle grid-row-4  items-center pb-5 justify-items-center  grid grid-cols-7   fixed bottom-0 xl:w-5/12 max-w-[36rem] lg:w-4/12  md:w-3/12 transition-all ease-in-out duration-100 bg-[#0e0818]/[0.99]  z-40">
-        <div className=" row-start-1 text-lg truncate col-span-7 w-11/12 rounded-md m-2 mt-7 text-white bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400">
-          now playing.. [image] Swing, Swing The All American Rejects
+        <div className="self-center max-w-44 max-h-36 row-start-1 text-lg truncate col-span-7 w-full rounded-md  mb-3 mt-6 text-white bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400">
+          <img src={selectedSong.selection[3]} /> {selectedSong.selection[1]}{' '}
+          {selectedSong.selection[2]}
         </div>
         <span className="text-[#38c3a7] row-start-2 text-sm">0:54</span>
         <div
