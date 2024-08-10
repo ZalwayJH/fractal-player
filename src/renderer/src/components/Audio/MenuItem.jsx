@@ -9,8 +9,8 @@ export const MenuItem = ({ title, artist, album, duration, albumCover }) => {
           <img src={albumCover} width="40" height="40" className="object-cover rounded-sm" />
         </div>
         <span className="col-start-2  truncate w-[15em]">
-          <h3 className="text-white ">{title}</h3>
-          <h4 className="text-gray-400">{artist}</h4>
+          <h3 className="text-white  truncate ">{title}</h3>
+          <h4 className="text-gray-400 truncate">{artist}</h4>
         </span>
         <h4 className="col-start-3 text-wrap w-[8em] truncate ">{album}</h4>
         <p className="col-start-4 pr-3">{duration}</p>

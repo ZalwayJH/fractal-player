@@ -19,17 +19,17 @@ export function useGetAudioFTDD(selectedSong) {
   //console.log(refinedPaths);
   useEffect(() => {
     console.log(selectedSong.selection);
-    const songPath = selectedSong.selection[0].replace('/@fs/', '');
+    let songPath = selectedSong.selection[0].replace('/@fs/', '');
     const fileURL = `file:${songPath}`;
     const song = new Audio(fileURL);
     musicRef.current = song;
     const context = new AudioContext();
     const analyzer = context.createAnalyser();
     const source = context.createMediaElementSource(song);
+    analyzer.fftSize = 1024;
+    source.connect(analyzer);
+    analyzer.connect(context.destination);
     song.onplay = function () {
-      analyzer.fftSize = 1024;
-      source.connect(analyzer);
-      analyzer.connect(context.destination);
       const bufferLength = 512;
       const dataArray = new Float32Array(bufferLength);
       function getAudioData() {
